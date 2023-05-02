@@ -11,6 +11,8 @@ public class BLEBehaviour : MonoBehaviour
 {
     public TMP_Text TextIsScanning, TextTargetDeviceConnection, TextTargetDeviceData, TextDiscoveredDevices;
     public Button ButtonStartScan;
+    private fliterUpdate FliterUpdate;
+    private modes Modes;
     
     // Change this to match your device.
     string targetDeviceName = "Arduino";
@@ -24,7 +26,9 @@ public class BLEBehaviour : MonoBehaviour
     BLE ble;
     BLE.BLEScan scan;
     bool isScanning = false, isConnected = false;
-    string deviceId = null;  
+    string deviceId = null, remoteAngle = null;  
+    float[] q = null, sensorData = null; 
+    string[] rawIMUData = null;
     IDictionary<string, string> discoveredDevices = new Dictionary<string, string>();
     int devicesCount = 0;
     byte[] valuesToWrite;
@@ -37,7 +41,7 @@ public class BLEBehaviour : MonoBehaviour
         ble = new BLE();
         
         TextTargetDeviceConnection.text = targetDeviceName + " not found.";
-        //readingThread = new Thread(ReadBleData);
+        readingThread = new Thread(ReadBleData);
     }
 
     void Update()
@@ -174,11 +178,11 @@ public class BLEBehaviour : MonoBehaviour
                 TextTargetDeviceConnection.text = "Connected to target device:\n" + targetDeviceName;
                 break;
             case "writeData":
-                // if (!readingThread.IsAlive)
-                // {
-                //     readingThread = new Thread(ReadBleData);
-                //     readingThread.Start();
-                // }
+                if (!readingThread.IsAlive)
+                {
+                    readingThread = new Thread(ReadBleData);
+                    readingThread.Start();
+                }
                 // if (remoteAngle != lastRemoteAngle)
                 // {
                 //     TextTargetDeviceData.text = "Remote angle: " + remoteAngle;
@@ -209,7 +213,7 @@ public class BLEBehaviour : MonoBehaviour
             ble.Close();
             scanningThread.Abort();
             connectionThread.Abort();
-            //readingThread.Abort();
+            readingThread.Abort();
             writingThread.Abort();
         } catch(NullReferenceException e)
         {
@@ -248,12 +252,18 @@ public class BLEBehaviour : MonoBehaviour
     
     private void ReadBleData(object obj)
     {
-        //byte[] packageReceived = BLE.ReadBytes();
-        // Convert little Endian.
-        // In this example we're interested about an angle
-        // value on the first field of our package.
-        // remoteAngle = packageReceived[0];
-        // Debug.Log("Angle: " + remoteAngle);
-        //Thread.Sleep(100);
+        byte[] packageReceived = BLE.ReadPackage();
+        remoteAngle = System.Text.Encoding.ASCII.GetString(packageReceived).TrimEnd('\0');
+        rawIMUData = remoteAngle.Split(",");
+        if (rawIMUData != null && rawIMUData.Length > 7)
+        {
+            q = FliterUpdate.updateFilter(rawIMUData);
+            sensorData = new float[] {float.Parse(rawIMUData[6]), float.Parse(rawIMUData[7]), float.Parse(rawIMUData[8]), float.Parse(rawIMUData[9])};
+            if (q != null)
+            {
+                Modes.updateIMU(q, sensorData);
+            }
+        }
+        Thread.Sleep(25);
     }
 }
