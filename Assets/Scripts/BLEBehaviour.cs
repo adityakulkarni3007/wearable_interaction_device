@@ -13,9 +13,11 @@ public class BLEBehaviour : MonoBehaviour
     public Button ButtonStartScan;
     private fliterUpdate FliterUpdate;
     private modes Modes;
+    private GameObject connectionPanel, modePanel;
+    private bool clutch;
     
     // Change this to match your device.
-    string targetDeviceName = "Arduino";
+    string targetDeviceName = "ESP32-RUST";
     string serviceUuid = "{4fafc201-1fb5-459e-8fcc-c5c9c331914b}";
     string[] characteristicUuids = {
         "{beb5483e-36e1-4688-b7f5-ea07361b26a8}",      // CUUID 1
@@ -39,13 +41,22 @@ public class BLEBehaviour : MonoBehaviour
     void Start()
     {
         ble = new BLE();
-        
+        connectionPanel = GameObject.FindWithTag("connectionPanel");
+        modePanel       = GameObject.FindWithTag("modePanel");
+        Modes                = GameObject.FindObjectOfType<modes>();
+        FliterUpdate                = GameObject.FindObjectOfType<fliterUpdate>();
+
         TextTargetDeviceConnection.text = targetDeviceName + " not found.";
         readingThread = new Thread(ReadBleData);
     }
 
     void Update()
     {  
+        if (Input.GetKey(KeyCode.C))
+        {
+            clutch = true;
+        }
+        else{clutch = false;}
         if (isScanning)
         {
             if (discoveredDevices.Count > devicesCount)
@@ -69,7 +80,7 @@ public class BLEBehaviour : MonoBehaviour
             // Target device is connected and GUI knows.
             if (ble.isConnected && isConnected)
             {
-                //UpdateGuiText("writeData");
+                UpdateGuiText("writeData");
             }
             // Target device is connected, but GUI hasn't updated yet.
             else if (ble.isConnected && !isConnected)
@@ -80,6 +91,7 @@ public class BLEBehaviour : MonoBehaviour
             } else if (!isConnected)
             {
                 TextTargetDeviceConnection.text = "Found target device:\n" + targetDeviceName;
+                connectionPanel.SetActive(false);
             } 
         }
     }
@@ -255,13 +267,17 @@ public class BLEBehaviour : MonoBehaviour
         byte[] packageReceived = BLE.ReadPackage();
         remoteAngle = System.Text.Encoding.ASCII.GetString(packageReceived).TrimEnd('\0');
         rawIMUData = remoteAngle.Split(",");
-        if (rawIMUData != null && rawIMUData.Length > 7)
-        {
-            q = FliterUpdate.updateFilter(rawIMUData);
-            sensorData = new float[] {float.Parse(rawIMUData[6]), float.Parse(rawIMUData[7]), float.Parse(rawIMUData[8]), float.Parse(rawIMUData[9])};
-            if (q != null)
+        Debug.Log("Length: " + rawIMUData.Length);
+        if (clutch == false){
+            if (rawIMUData != null && rawIMUData.Length > 11)
             {
-                Modes.updateIMU(q, sensorData);
+                q = FliterUpdate.updateFilter(rawIMUData);
+                sensorData = new float[] {float.Parse(rawIMUData[6]), float.Parse(rawIMUData[7]), float.Parse(rawIMUData[8]), float.Parse(rawIMUData[9])};
+                Debug.Log("qx: " + q[0] + " qy: " + q[1] + " qz: " + q[2] + " qw: " + q[3]);
+                if (q != null)
+                {
+                    Modes.updateIMU(q, sensorData);
+                }
             }
         }
         Thread.Sleep(25);

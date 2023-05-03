@@ -440,6 +440,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1555354671}
         m_TargetAssemblyTypeName: modes, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 190675973}
+        m_TargetAssemblyTypeName: modes, Assembly-CSharp
         m_MethodName: checkTranslationMode
         m_Mode: 1
         m_Arguments:
@@ -543,7 +555,7 @@ GameObject:
   - component: {fileID: 19702614}
   m_Layer: 0
   m_Name: Text
-  m_TagString: Untagged
+  m_TagString: opacityText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1453,7 +1465,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &190675972
 Transform:
   m_ObjectHideFlags: 0
@@ -1479,9 +1491,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 190675971}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5dafa3841d6380d4ead64ed9b1e5c139, type: 3}
+  m_Script: {fileID: 11500000, guid: 369ddabf5f6b07441ac19955c2006a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mat: {fileID: 2100000, guid: beba92325095d7646815e7edb2bc2437, type: 2}
+  mode: 
+  scaling_factor: 0
+  cuttingPlane: {fileID: 961438047}
+  body: {fileID: 0}
+  opacitySlider: {fileID: 0}
+  modeText: []
 --- !u!114 &190675974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1491,7 +1510,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 190675971}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19ba405bb8996db419eba2fc052729bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 4be088323a759bb46913f732a01383ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &206754642
@@ -4374,7 +4393,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 66d1f0823d5840f47b5b0e36589af94a, type: 2}
+  - {fileID: 2100000, guid: d2788e6d8710ce949a034f8cd9a1a6c5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4741,10 +4760,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1555354663}
     m_Modifications:
+    - target: {fileID: -8854620311884669473, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: insides
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fa631461a79f57a42aab04fce031e1bb,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fa631461a79f57a42aab04fce031e1bb,
         type: 3}
@@ -4811,10 +4835,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: -7584339438880714534, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: envelope
+      objectReference: {fileID: 0}
+    - target: {fileID: -7015141661737671829, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: envelope
+      objectReference: {fileID: 0}
+    - target: {fileID: 711122909377971071, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: spikes
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fa631461a79f57a42aab04fce031e1bb,
         type: 3}
       propertyPath: m_Name
       value: Corona Virus Intersection (LOW) (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406892164789166282, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: envelope
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890663608236819051, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: envelope
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa631461a79f57a42aab04fce031e1bb, type: 3}
@@ -4909,7 +4958,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 59296a099bc6977478052ff4e24d6775, type: 2}
+  - {fileID: 2100000, guid: ac03240e13ea45e429b6b167be83f0dd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6211,7 +6260,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 40f5bcbb9efdea04d8bfefd726dd22a4, type: 2}
+  - {fileID: 2100000, guid: ac03240e13ea45e429b6b167be83f0dd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6649,7 +6698,7 @@ GameObject:
   - component: {fileID: 1203418203}
   m_Layer: 0
   m_Name: Text
-  m_TagString: Untagged
+  m_TagString: slicerText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7073,7 +7122,7 @@ GameObject:
   - component: {fileID: 1274123285}
   m_Layer: 0
   m_Name: Text
-  m_TagString: Untagged
+  m_TagString: translationText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7932,7 +7981,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5d46131657610c14b90017c14de60a74, type: 2}
+  - {fileID: 2100000, guid: beba92325095d7646815e7edb2bc2437, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7969,14 +8018,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428341004}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.5, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 190675972}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!114 &1428341009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8340,6 +8389,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1555354671}
+        m_TargetAssemblyTypeName: modes, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 190675973}
         m_TargetAssemblyTypeName: modes, Assembly-CSharp
         m_MethodName: checkOpacityMode
         m_Mode: 1
@@ -9030,7 +9091,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1555354663
 Transform:
   m_ObjectHideFlags: 0
@@ -9180,7 +9241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369ddabf5f6b07441ac19955c2006a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 0}
+  mat: {fileID: 2100000, guid: beba92325095d7646815e7edb2bc2437, type: 2}
   mode: 
   scaling_factor: 0
   cuttingPlane: {fileID: 0}
@@ -9427,8 +9488,8 @@ MonoBehaviour:
   tickMarks: {fileID: 1427416003}
   thumbVisuals: {fileID: 256531793}
   sliderAxis: 1
-  sliderStartDistance: -0.06763342
-  sliderEndDistance: 0.06762034
+  sliderStartDistance: -0.06763358
+  sliderEndDistance: 0.0676351
   OnValueUpdated:
     m_PersistentCalls:
       m_Calls:
@@ -9804,6 +9865,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1555354671}
+        m_TargetAssemblyTypeName: modes, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 190675973}
         m_TargetAssemblyTypeName: modes, Assembly-CSharp
         m_MethodName: checkSlicingMode
         m_Mode: 1
@@ -11022,10 +11095,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1555354663}
     m_Modifications:
+    - target: {fileID: -8854620311884669473, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: insides
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fa631461a79f57a42aab04fce031e1bb,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fa631461a79f57a42aab04fce031e1bb,
         type: 3}
@@ -11092,10 +11170,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7584339438880714534, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: envelope
+      objectReference: {fileID: 0}
+    - target: {fileID: -7015141661737671829, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: envelope
+      objectReference: {fileID: 0}
+    - target: {fileID: 711122909377971071, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: spikes
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fa631461a79f57a42aab04fce031e1bb,
         type: 3}
       propertyPath: m_Name
       value: Corona Virus Intersection (LOW)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406892164789166282, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: envelope
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890663608236819051, guid: fa631461a79f57a42aab04fce031e1bb,
+        type: 3}
+      propertyPath: m_TagString
+      value: envelope
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa631461a79f57a42aab04fce031e1bb, type: 3}
@@ -11453,6 +11556,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1555354671}
+        m_TargetAssemblyTypeName: modes, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 190675973}
         m_TargetAssemblyTypeName: modes, Assembly-CSharp
         m_MethodName: checkRotationMode
         m_Mode: 1

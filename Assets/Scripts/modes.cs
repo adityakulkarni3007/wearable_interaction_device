@@ -109,13 +109,13 @@ public class modes : MonoBehaviour
         }
         // checkTask();
         checkMode();
-        // if (Input.GetKeyDown(KeyCode.R))
-        // {
-        //     // Reset Rotation
-        //     FliterUpdate.updateQuaternion(0.0f,0.0f,0.0f,1.0f);
-        //     // Reset Opacity
-        //     FliterUpdate.setTheta(0.0f);
-        // }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            // Reset Rotation
+            FliterUpdate.updateQuaternion(0.0f,0.0f,0.0f,1.0f);
+            // Reset Opacity
+            FliterUpdate.setTheta(0.0f);
+        }
         float[] q = FliterUpdate.getQuaternion();
         Debug.Log("1: " + button1 + " 2: " + button2 + " 3: " + button3 + " 4: " + button4);
     }
@@ -260,7 +260,7 @@ public class modes : MonoBehaviour
             button2 = sensorData[1]==1;
             button3 = sensorData[2]==1;
             button4 = sensorData[3]==1;
-
+            Debug.Log("qw: " + qw + " qx: " + qx + " qy: " + qy + " qz: " + qz);
         }
         // If there is an error parsing the values, log an error message and return.
         catch
@@ -417,8 +417,9 @@ public class modes : MonoBehaviour
         Quaternion spin2 = Quaternion.Euler(new Vector3(0, 0, -90));
         Quaternion spin3 = Quaternion.Euler(new Vector3(180, 0, 0));
         Quaternion spin4 = Quaternion.Euler(new Vector3(0, 0, 90));
+        Quaternion spin5 = Quaternion.Euler(new Vector3(0, 90, 0));
         // Unity and the IMU are both left handed coordinate systems
-        obj.transform.rotation = spin1*spin2*spin3*spin4*rot;
+        obj.transform.rotation = spin5*spin1*spin2*spin3*spin4*rot;
     }
 
     void opacity()

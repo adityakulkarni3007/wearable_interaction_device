@@ -3,7 +3,26 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - RefZ
+  - body
+  - opacityText
+  - rotation
+  - opacitySlider
+  - translation
+  - cuttingPlane
+  - RefY
+  - translationText
+  - modePanel
+  - translationAxis
+  - slicing
+  - opacity
+  - RefX
+  - slicerText
+  - connectionPanel
+  - spikes
+  - insides
+  - envelope
   layers:
   - Default
   - TransparentFX
