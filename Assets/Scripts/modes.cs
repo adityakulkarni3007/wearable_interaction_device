@@ -24,6 +24,7 @@ public class modes : MonoBehaviour
     public GameObject cuttingPlane, body;
     public PinchSlider opacitySlider;
     public TMP_Text[] modeText;
+    private Vector3 initialPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +61,7 @@ public class modes : MonoBehaviour
         // opacityGoalObj              = GameObject.FindWithTag("opacityGoal");
         FliterUpdate                = GameObject.FindObjectOfType<fliterUpdate>();
         inMode                      = false;   
-
+        initialPosition             = body.transform.position;
 
         // rotationGoalObj.SetActive(false);
         // translationGoalObj.SetActive(false);
@@ -111,10 +112,25 @@ public class modes : MonoBehaviour
         checkMode();
         if (Input.GetKeyDown(KeyCode.R))
         {
-            // Reset Rotation
-            FliterUpdate.updateQuaternion(0.0f,0.0f,0.0f,1.0f);
-            // Reset Opacity
-            FliterUpdate.setTheta(0.0f);
+            if (mode == "rotation"){
+                // Reset Rotation
+                FliterUpdate.updateQuaternion(0.0f,0.0f,0.0f,1.0f);
+            }
+            if (mode == "translation"){
+                // Reset Translation
+                body.transform.position = initialPosition;
+                translationAxis.transform.position = initialPosition;
+                FliterUpdate.updateQuaternion(0.0f,0.0f,0.0f,1.0f);
+            }
+            if (mode == "slicing"){
+                // Reset Slicing
+                cuttingPlane.transform.position = body.transform.position;
+                FliterUpdate.updateQuaternion(0.0f,0.0f,0.0f,1.0f);
+            }
+            if (mode == "opacity"){
+                // Reset Opacity
+                FliterUpdate.setTheta(0.0f);
+            }
         }
         float[] q = FliterUpdate.getQuaternion();
         Debug.Log("1: " + button1 + " 2: " + button2 + " 3: " + button3 + " 4: " + button4);
@@ -171,10 +187,10 @@ public class modes : MonoBehaviour
                 mat1[i].SetVector("_planePosition", cuttingPlane.transform.position);
                 mat1[i].SetVector("_planeNormal", cuttingPlane.transform.up);
             }
-            if (Input.GetKey(KeyCode.O)){
+            if (Input.GetKey(KeyCode.L)){
                 translation_wrt_gameObject(cuttingPlane, true);
             }
-            if (Input.GetKey(KeyCode.L)){
+            if (Input.GetKey(KeyCode.O)){
                 translation_wrt_gameObject(cuttingPlane, false);
             }
         }
@@ -376,11 +392,9 @@ public class modes : MonoBehaviour
     {
         rotation(translationAxis);
            if (Input.GetKey(KeyCode.O)){
-                translation_wrt_gameObject(translationAxis, true);
                 body.transform.position += translationAxis.transform.TransformDirection(new Vector3(0.0f,0.01f*1.0f, 0.0f));
             }
             if (Input.GetKey(KeyCode.L)){
-                translation_wrt_gameObject(translationAxis, false);
                 body.transform.position -= translationAxis.transform.TransformDirection(new Vector3(0.0f,0.01f*1.0f, 0.0f));
             }
     }
