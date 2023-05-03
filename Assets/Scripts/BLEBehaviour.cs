@@ -6,6 +6,7 @@ using System.Threading;
 using UnityEngine.UI;
 using TMPro;
 using Random = System.Random;
+using UnityEngine.SceneManagement;
 
 public class BLEBehaviour : MonoBehaviour
 {
@@ -281,5 +282,9 @@ public class BLEBehaviour : MonoBehaviour
             }
         }
         Thread.Sleep(25);
+    }
+
+    public void LabryinthScene() {
+        SceneManager.LoadScene(sceneName:"Labryinth");
     }
 }
