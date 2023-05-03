@@ -16,7 +16,8 @@ public class modes : MonoBehaviour
     private GameObject[] opacityText, slicerText, translationText, translationReferenceAxes, resultText, spikes, envelope, insides;
     private bool goalFlag, inMode;
     private fliterUpdate FliterUpdate;
-    private bool button1, button2, button3, button4;
+    private int button1, button2, button3, button4;
+    private int buttonDelta1, buttonDelta2, buttonDelta3, buttonDelta4, b1_prev, b2_prev, b3_prev, b4_prev;
     private Material[] mat1;
     public Material mat;
     public string mode;
@@ -72,8 +73,7 @@ public class modes : MonoBehaviour
             modeText[i] = GameObject.FindWithTag(textTags[i]).GetComponent<TMP_Text>();
         }
         mat1 = new Material[spikes.Length + envelope.Length + insides.Length];
-        for (int i = 0; i < spikes.Length; i++)
-        {   
+        for (int i = 0; i < spikes.Length; i++){   
             spikes[i].GetComponent<Renderer>().material.SetColor("_Color", Color.red);   
             spikes[i].GetComponent<Renderer>().material.SetFloat("_opacity", 1.0f);
             mat1[i] = spikes[i].GetComponent<Renderer>().material;
@@ -98,12 +98,12 @@ public class modes : MonoBehaviour
         changeTextOpacity();
         Debug.Log("Mode: " + mode);
         Debug.Log("In Mode: " + inMode);
-        if (button4 && inMode)
+        Debug.Log("ButtonDelta4: " + buttonDelta4);
+        if (buttonDelta4 == 1 && inMode)
         {
-            Debug.Log("This should never print");
             inMode = false;
             mode = "menu";
-            button4 = false;
+            buttonDelta4 = 0;
         }
         else if(inMode==false){
             modeSelection();
@@ -134,6 +134,7 @@ public class modes : MonoBehaviour
         }
         float[] q = FliterUpdate.getQuaternion();
         Debug.Log("1: " + button1 + " 2: " + button2 + " 3: " + button3 + " 4: " + button4);
+        Debug.Log("1: " + buttonDelta1 + " 2: " + buttonDelta2 + " 3: " + buttonDelta3 + " 4: " + buttonDelta4);
     }
 
     public void getData(ref fliterUpdate update)
@@ -198,7 +199,6 @@ public class modes : MonoBehaviour
             cuttingPlane.SetActive(false);
             setGameObjectArrayActive(ref slicerText, false);
             for (int i = 0; i < mat1.Length; i++){
-                Debug.Log(i);
                 mat1[i].SetVector("_planePosition", new Vector3(0, 100000000 ,0));
                 mat1[i].SetVector("_planeNormal", new Vector3(0,-1,0));
             }
@@ -269,14 +269,26 @@ public class modes : MonoBehaviour
             
             prev_theta = curr_theta;
             curr_theta = FliterUpdate.getTheta();
-            Debug.Log("Delta: " + delta + " curr: " + curr_theta + " prev: " + prev_theta);
+            // Debug.Log("Delta: " + delta + " curr: " + curr_theta + " prev: " + prev_theta);
             delta = curr_theta - prev_theta;
 
-            button1 = sensorData[0]==1;
-            button2 = sensorData[1]==1;
-            button3 = sensorData[2]==1;
-            button4 = sensorData[3]==1;
-            Debug.Log("qw: " + qw + " qx: " + qx + " qy: " + qy + " qz: " + qz);
+            button1 = 1 - (int)sensorData[0];
+            button2 = 1 - (int)sensorData[1];
+            button3 = 1 - (int)sensorData[2];
+            button4 = 1 - (int)sensorData[3];
+            // TODO: Make this an array 
+            if (b1_prev!=button1) {buttonDelta1 = button1;}
+            else{buttonDelta1 = 0;}
+            b1_prev = button1;
+            if (b2_prev!=button2) {buttonDelta2 = button2;}
+            else{buttonDelta2 = 0;}
+            b2_prev = button2;
+            if (b3_prev!=button3) {buttonDelta3 = button3;}
+            else{buttonDelta3 = 0;}
+            b3_prev = button3;
+            if (b4_prev!=button4) {buttonDelta4 = button4;}
+            else{buttonDelta4 = 0;}
+            b4_prev = button4;
         }
         // If there is an error parsing the values, log an error message and return.
         catch
@@ -297,15 +309,15 @@ public class modes : MonoBehaviour
     // This method is responsible for handling the mode selection logic.
     void modeSelection()
     {
-        if (button1){checkRotationMode();}
-        if (button2){checkTranslationMode();}
-        if (button3){checkSlicingMode();}
-        if (button4){checkOpacityMode();}
+        if (buttonDelta1 == 1){checkRotationMode();}
+        if (buttonDelta2 == 1){checkTranslationMode();}
+        if (buttonDelta3 == 1){checkSlicingMode();}
+        if (buttonDelta4 == 1){checkOpacityMode();}
     }
 
     public void checkRotationMode()
     {
-        button1 = false;
+        buttonDelta1 = 0;
         inMode = true;
         mode = "rotation";
         Debug.Log("Mode inside checkRotationMode: " + mode);
@@ -314,7 +326,7 @@ public class modes : MonoBehaviour
 
     public void checkTranslationMode()
     {
-        button2 = false;
+        buttonDelta2 = 0;
         inMode = true;
         mode = "translation";
         translationAxis.SetActive(true);
@@ -325,7 +337,7 @@ public class modes : MonoBehaviour
 
     public void checkSlicingMode()
     {
-        button3 = false;
+        buttonDelta3 = 0;
         inMode = true;
         mode = "slicing";
         // disableGoalObjects();
@@ -338,7 +350,7 @@ public class modes : MonoBehaviour
 
     public void checkOpacityMode()
     {
-        button4 = false;
+        buttonDelta4 = 0;
         inMode = true;
         mode = "opacity";
         // disableGoalObjects();

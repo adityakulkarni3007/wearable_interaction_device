@@ -270,11 +270,10 @@ public class BLEBehaviour : MonoBehaviour
         rawIMUData = remoteAngle.Split(",");
         Debug.Log("Length: " + rawIMUData.Length);
         if (clutch == false){
-            if (rawIMUData != null && rawIMUData.Length > 11)
+            if (rawIMUData != null && rawIMUData.Length >= 10)
             {
                 q = FliterUpdate.updateFilter(rawIMUData);
                 sensorData = new float[] {float.Parse(rawIMUData[6]), float.Parse(rawIMUData[7]), float.Parse(rawIMUData[8]), float.Parse(rawIMUData[9])};
-                Debug.Log("qx: " + q[0] + " qy: " + q[1] + " qz: " + q[2] + " qw: " + q[3]);
                 if (q != null)
                 {
                     Modes.updateIMU(q, sensorData);
