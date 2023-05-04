@@ -23,6 +23,7 @@ TagManager:
   - spikes
   - insides
   - envelope
+  - ground
   layers:
   - Default
   - TransparentFX

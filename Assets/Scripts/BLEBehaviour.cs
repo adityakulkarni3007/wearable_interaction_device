@@ -274,7 +274,7 @@ public class BLEBehaviour : MonoBehaviour
             {
                 q = FliterUpdate.updateFilter(rawIMUData);
                 sensorData = new float[] {float.Parse(rawIMUData[6]), float.Parse(rawIMUData[7]), float.Parse(rawIMUData[8]), float.Parse(rawIMUData[9])};
-                if (q != null)
+                if (q != null && Modes != null)
                 {
                     Modes.updateIMU(q, sensorData);
                 }
