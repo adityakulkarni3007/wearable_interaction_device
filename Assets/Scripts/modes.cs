@@ -7,14 +7,14 @@ using Microsoft.MixedReality.Toolkit.UI;
 
 public class modes : MonoBehaviour
 {
-    private static int translation_mode;
+    private int translation_mode;
     private float[] q; 
     private string[] textTags;
     private string translation_method;
     private float qx, qy, qz, qw, curr_theta, prev_theta, startTime, maintainTime, delta;
     private GameObject rotationGoalObj, translationGoalObj, slicerGoalObj, opacityGoalObj, translationAxis;
     private GameObject[] opacityText, slicerText, translationText, translationReferenceAxes, resultText, spikes, envelope, insides;
-    private bool goalFlag, inMode;
+    private bool goalFlag, inMode, resetFlag;
     private fliterUpdate FliterUpdate;
     private int button1, button2, button3, button4;
     private int buttonDelta1, buttonDelta2, buttonDelta3, buttonDelta4, b1_prev, b2_prev, b3_prev, b4_prev;
@@ -47,7 +47,7 @@ public class modes : MonoBehaviour
         textTags                    = new string[4]{"rotation","translation","slicing","opacity"};
         modeText                    = new TMP_Text[textTags.Length];
         mode                        = "menu";
-        translation_method          = "free";
+        translation_method          = "noMode";
         goalFlag                    = false;
         translation_mode            = 0;
         body                        = GameObject.FindWithTag("body");
@@ -90,7 +90,6 @@ public class modes : MonoBehaviour
         }
     }
 
-
     // Update is called once per frame
     void LateUpdate()
     {
@@ -110,7 +109,7 @@ public class modes : MonoBehaviour
         }
         // checkTask();
         checkMode();
-        if (Input.GetKeyDown(KeyCode.R))
+        if (resetFlag)
         {
             if (mode == "rotation"){
                 // Reset Rotation
@@ -131,6 +130,7 @@ public class modes : MonoBehaviour
                 // Reset Opacity
                 FliterUpdate.setTheta(0.0f);
             }
+            resetFlag = false;
         }
         float[] q = FliterUpdate.getQuaternion();
         Debug.Log("1: " + button1 + " 2: " + button2 + " 3: " + button3 + " 4: " + button4);
@@ -188,10 +188,10 @@ public class modes : MonoBehaviour
                 mat1[i].SetVector("_planePosition", cuttingPlane.transform.position);
                 mat1[i].SetVector("_planeNormal", cuttingPlane.transform.up);
             }
-            if (Input.GetKey(KeyCode.L)){
+            if (button2==1){
                 translation_wrt_gameObject(cuttingPlane, true);
             }
-            if (Input.GetKey(KeyCode.O)){
+            if (button2==1){
                 translation_wrt_gameObject(cuttingPlane, false);
             }
         }
@@ -388,25 +388,25 @@ public class modes : MonoBehaviour
 
     void selectAxis(GameObject obj)
     {
-        if (Input.GetKeyDown(KeyCode.B)) {
-            translation_mode    = 0;
+        if (buttonDelta1==1) {
+            translation_mode = mod(translation_mode + 1,3);
+            buttonDelta1 = 0;
         }
-        else if (Input.GetKeyDown(KeyCode.N)){
-            translation_mode    = 1;
-        }
-        else if (Input.GetKeyDown(KeyCode.M)){
-            translation_mode    = 2;
+        else if (buttonDelta2==1){
+            translation_mode = mod(translation_mode - 1,3);
+            buttonDelta2 = 0;
         }
         translation_three_axis(obj);
+        Debug.Log("Translation mode: " + translation_mode);
     }
 
     void translation_wrt_world(GameObject obj)
     {
         rotation(translationAxis);
-           if (Input.GetKey(KeyCode.O)){
+           if (button1==1){
                 body.transform.position += translationAxis.transform.TransformDirection(new Vector3(0.0f,0.01f*1.0f, 0.0f));
             }
-            if (Input.GetKey(KeyCode.L)){
+            if (button2==1){
                 body.transform.position -= translationAxis.transform.TransformDirection(new Vector3(0.0f,0.01f*1.0f, 0.0f));
             }
     }
@@ -568,5 +568,20 @@ public class modes : MonoBehaviour
                     // Debug.Log("Goal Not Reached");
                 }        
             }
+    }
+
+    public float[] getButtonState()
+    {
+        return new float[] {button1, button2, button3, button4};
+    }
+
+    public void reset()
+    {
+        resetFlag = true;
+    }
+
+    int mod(int x, int m) {
+        int r = x%m;
+        return r<0 ? r+m : r;
     }
 }

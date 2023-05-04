@@ -53,11 +53,16 @@ public class BLEBehaviour : MonoBehaviour
 
     void Update()
     {  
-        if (Input.GetKey(KeyCode.C))
+        if (sensorData != null && sensorData.Length == 4)
         {
-            clutch = true;
+            if (sensorData[2]==0)
+            {
+                clutch = true;
+            }
+            else{clutch = false;}
+            Debug.Log("clutch: " + clutch);
+            Debug.Log("sensorData: " + sensorData[0] + " " + sensorData[1] + " " + sensorData[2] + " " + sensorData[3]);
         }
-        else{clutch = false;}
         if (isScanning)
         {
             if (discoveredDevices.Count > devicesCount)
@@ -269,11 +274,11 @@ public class BLEBehaviour : MonoBehaviour
         remoteAngle = System.Text.Encoding.ASCII.GetString(packageReceived).TrimEnd('\0');
         rawIMUData = remoteAngle.Split(",");
         Debug.Log("Length: " + rawIMUData.Length);
-        if (clutch == false){
             if (rawIMUData != null && rawIMUData.Length >= 10)
             {
-                q = FliterUpdate.updateFilter(rawIMUData);
                 sensorData = new float[] {float.Parse(rawIMUData[6]), float.Parse(rawIMUData[7]), float.Parse(rawIMUData[8]), float.Parse(rawIMUData[9])};
+            if (clutch == false){
+                q = FliterUpdate.updateFilter(rawIMUData);
                 if (q != null && Modes != null)
                 {
                     Modes.updateIMU(q, sensorData);

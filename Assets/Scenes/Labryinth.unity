@@ -13981,6 +13981,7 @@ GameObject:
   - component: {fileID: 1969473957}
   - component: {fileID: 1969473956}
   - component: {fileID: 1969473959}
+  - component: {fileID: 1969473960}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -14189,6 +14190,18 @@ MonoBehaviour:
     RepeatSnapPoints: 0
     SnapRadius: 0
   elasticTypes: 0
+--- !u!114 &1969473960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969473950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c227f07a26591dc498bc98aa56a47a66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1979031082
 GameObject:
   m_ObjectHideFlags: 0
