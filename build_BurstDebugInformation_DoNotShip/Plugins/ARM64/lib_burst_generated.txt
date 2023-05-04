@@ -185,7 +185,6 @@ Library: lib_burst_generated
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Microsoft.MixedReality.Toolkit.Providers.XRSDK.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Microsoft.MixedReality.Toolkit.Services.InputAnimation.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.XR.Management.dll
---root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Microsoft.MixedReality.Toolkit.Services.DiagnosticsSystem.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Microsoft.MixedReality.Toolkit.Services.SceneSystem.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Services.Core.Threading.dll
@@ -193,6 +192,7 @@ Library: lib_burst_generated
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Services.Core.Configuration.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\UnityEngine.SpatialTracking.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\UnityEngine.XR.LegacyInputHelpers.dll
+--root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Microsoft.MixedReality.Toolkit.Services.SpatialAwarenessSystem.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Services.Core.Networking.dll

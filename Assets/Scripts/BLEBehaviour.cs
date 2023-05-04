@@ -289,6 +289,12 @@ public class BLEBehaviour : MonoBehaviour
     }
 
     public void LabryinthScene() {
+        CleanUp();
         SceneManager.LoadScene(sceneName:"Labryinth");
+    }
+
+    public void MainScene() {
+        CleanUp();
+        SceneManager.LoadScene(sceneName:"Demo");
     }
 }

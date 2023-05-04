@@ -118,7 +118,7 @@ public class BLE
         public delegate void FinishedDel();
         public FoundDel Found;
         public FinishedDel Finished;
-        internal bool cancelled = false;
+        public bool cancelled = false;
 
         public void Cancel()
         {
@@ -254,6 +254,7 @@ public class BLE
     {
         Impl.Quit();
         isConnected = false;
+        currentScan.cancelled = false;
     }
 
     public static string GetError()

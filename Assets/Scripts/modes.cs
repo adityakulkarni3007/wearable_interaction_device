@@ -472,52 +472,52 @@ public class modes : MonoBehaviour
         }
     }
 */
-    void checkPoseGoal(GameObject obj, GameObject goalObj)
-    {
-        Vector3 goalPos = goalObj.transform.position; // goal position
-        float errorTThresh = 20.0f; //maximum error between goal and curr position
-        Quaternion goalRot = goalObj.transform.rotation; // goal rotation
-        float errorRThresh = 0.1f; //maximum errorR between goal and curr orientation
+    // void checkPoseGoal(GameObject obj, GameObject goalObj)
+    // {
+    //     Vector3 goalPos = goalObj.transform.position; // goal position
+    //     float errorTThresh = 20.0f; //maximum error between goal and curr position
+    //     Quaternion goalRot = goalObj.transform.rotation; // goal rotation
+    //     float errorRThresh = 0.1f; //maximum errorR between goal and curr orientation
 
-        // get errors
-        Vector3 errorT = new Vector3();
-        errorT[0] = Mathf.Abs(goalPos.x - obj.transform.position.x);
-        errorT[1] = Mathf.Abs(goalPos.y - obj.transform.position.y);
-        errorT[2] = Mathf.Abs(goalPos.z - obj.transform.position.z);
+    //     // get errors
+    //     Vector3 errorT = new Vector3();
+    //     errorT[0] = Mathf.Abs(goalPos.x - obj.transform.position.x);
+    //     errorT[1] = Mathf.Abs(goalPos.y - obj.transform.position.y);
+    //     errorT[2] = Mathf.Abs(goalPos.z - obj.transform.position.z);
 
         
         
-        // get errorR
-        Vector4 errorR = new Vector4();
-        errorR[0] = Mathf.Abs(goalRot.x - obj.transform.rotation.x);
-        errorR[1] = Mathf.Abs(goalRot.y - obj.transform.rotation.y);
-        errorR[2] = Mathf.Abs(goalRot.z - obj.transform.rotation.z);
-        errorR[3] = Mathf.Abs(goalRot.w - obj.transform.rotation.w);
+    //     // get errorR
+    //     Vector4 errorR = new Vector4();
+    //     errorR[0] = Mathf.Abs(goalRot.x - obj.transform.rotation.x);
+    //     errorR[1] = Mathf.Abs(goalRot.y - obj.transform.rotation.y);
+    //     errorR[2] = Mathf.Abs(goalRot.z - obj.transform.rotation.z);
+    //     errorR[3] = Mathf.Abs(goalRot.w - obj.transform.rotation.w);
 
-        //calculate magnitude of errorT
-        float errorTMag = Mathf.Sqrt(Mathf.Pow(errorT[0],2.0f) + Mathf.Pow(errorT[1], 2.0f) + Mathf.Pow(errorT[2], 2.0f));
-        // Debug.Log("ErrorT: " + errorTMag);
+    //     //calculate magnitude of errorT
+    //     float errorTMag = Mathf.Sqrt(Mathf.Pow(errorT[0],2.0f) + Mathf.Pow(errorT[1], 2.0f) + Mathf.Pow(errorT[2], 2.0f));
+    //     // Debug.Log("ErrorT: " + errorTMag);
 
-        //calculate magnitude of errorR
-        float errorRMag = Mathf.Sqrt(Mathf.Pow(errorR[0],2.0f) + Mathf.Pow(errorR[1], 2.0f) + Mathf.Pow(errorR[2], 2.0f) + Mathf.Pow(errorR[3], 2.0f));
-        // Debug.Log("ErrorR: " + errorRMag);
+    //     //calculate magnitude of errorR
+    //     float errorRMag = Mathf.Sqrt(Mathf.Pow(errorR[0],2.0f) + Mathf.Pow(errorR[1], 2.0f) + Mathf.Pow(errorR[2], 2.0f) + Mathf.Pow(errorR[3], 2.0f));
+    //     // Debug.Log("ErrorR: " + errorRMag);
         
-        if (errorTMag < errorTThresh & errorRMag < errorRThresh)
-        {
-            string errorMsg = "Error(position): " + errorTMag.ToString() + " Error(rotation): " + errorRMag.ToString();
-            // Check if the user maintains the goal position for 3 seconds
-            isGoalMaintained(errorMsg);
-        }
-        else
-        {
-            maintainTime = 0.0f;
-        }
-    }
+    //     if (errorTMag < errorTThresh & errorRMag < errorRThresh)
+    //     {
+    //         string errorMsg = "Error(position): " + errorTMag.ToString() + " Error(rotation): " + errorRMag.ToString();
+    //         // Check if the user maintains the goal position for 3 seconds
+    //         isGoalMaintained(errorMsg);
+    //     }
+    //     else
+    //     {
+    //         maintainTime = 0.0f;
+    //     }
+    // }
 
-    void checkSlicerGoal()
-    {
+    // void checkSlicerGoal()
+    // {
 
-    }
+    // }
 
     // Utils
     void setGameObjectArrayActive(ref GameObject[] obj, bool enable)
@@ -539,36 +539,36 @@ public class modes : MonoBehaviour
         maintainTime = 0.0f;
     }
 */
-    void goalAchieved(string errorMsg)
-    {
-        float timeToCompletion = 0.0f;
-        timeToCompletion = Time.time - startTime - 1.5f;
-        goalFlag = true;
-        resultText[0].GetComponent<TMP_Text>().text = "Goal Reached!" + "\n" + 
-                                                "Time to Completion: " + timeToCompletion.ToString() + " seconds" +
-                                                "\n" + "Accuracy: " + errorMsg;
-        setGameObjectArrayActive(ref resultText, true);
-        // Debug.Log(timeToCompletion);
-    }
+    // void goalAchieved(string errorMsg)
+    // {
+    //     float timeToCompletion = 0.0f;
+    //     timeToCompletion = Time.time - startTime - 1.5f;
+    //     goalFlag = true;
+    //     resultText[0].GetComponent<TMP_Text>().text = "Goal Reached!" + "\n" + 
+    //                                             "Time to Completion: " + timeToCompletion.ToString() + " seconds" +
+    //                                             "\n" + "Accuracy: " + errorMsg;
+    //     setGameObjectArrayActive(ref resultText, true);
+    //     // Debug.Log(timeToCompletion);
+    // }
 
-    void isGoalMaintained(string errorMsg)
-    {
+    // void isGoalMaintained(string errorMsg)
+    // {
         
-            if (maintainTime == 0.0f)
-            {
-                maintainTime = Time.time;
-            }
-            else if (Time.time - maintainTime > 1.5f)
-            {
-                if (goalFlag == false)
-                { //goal reached
-                    goalAchieved(errorMsg);
-                } else
-                {
-                    // Debug.Log("Goal Not Reached");
-                }        
-            }
-    }
+    //         if (maintainTime == 0.0f)
+    //         {
+    //             maintainTime = Time.time;
+    //         }
+    //         else if (Time.time - maintainTime > 1.5f)
+    //         {
+    //             if (goalFlag == false)
+    //             { //goal reached
+    //                 goalAchieved(errorMsg);
+    //             } else
+    //             {
+    //                 // Debug.Log("Goal Not Reached");
+    //             }        
+    //         }
+    // }
 
     public float[] getButtonState()
     {
