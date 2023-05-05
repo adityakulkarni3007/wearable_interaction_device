@@ -247,11 +247,10 @@ public class BLEBehaviour : MonoBehaviour
             return;
         }
         
-        byte[] bytes = new byte[] {0, 1, 2, 3};
-        Random random = new Random();
-        int start2 = random.Next(0, bytes.Length);
-        valuesToWrite = new byte[] {bytes[start2]};
-        TextTargetDeviceData.text = "Writing some new: " + valuesToWrite[0];
+        string text = "RUSTY";
+        valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text);
+        TextTargetDeviceData.text = "Writing some new: " + text;
+        Debug.Log("Writing some new: " + text);
         
         writingThread = new Thread(WriteBleData);
         writingThread.Start();
