@@ -24,6 +24,10 @@ TagManager:
   - insides
   - envelope
   - ground
+  - indexFinger
+  - middleFinger
+  - ringFinger
+  - littleFinger
   layers:
   - Default
   - TransparentFX
