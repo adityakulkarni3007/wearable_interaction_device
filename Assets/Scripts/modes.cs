@@ -12,8 +12,8 @@ public class modes : MonoBehaviour
     private string[] textTags;
     private string translation_method;
     private float qx, qy, qz, qw, curr_theta, prev_theta, startTime, maintainTime, delta;
-    private GameObject rotationGoalObj, translationGoalObj, slicerGoalObj, opacityGoalObj, translationAxis;
-    private GameObject[] opacityText, slicerText, translationText, translationReferenceAxes, resultText, spikes, envelope, insides;
+    private GameObject rotationGoalObj, translationGoalObj, slicerGoalObj, opacityGoalObj, indexFingerText, middleFingerText, ringFingerText, littleFingerText;
+    private GameObject[] opacityText, slicerText, translationText, translationReferenceAxes, resultText, spikes, envelope, insides, translationAxis;
     private bool goalFlag, inMode, resetFlag;
     private fliterUpdate FliterUpdate;
     private int button1, button2, button3, button4;
@@ -31,7 +31,11 @@ public class modes : MonoBehaviour
     void Start()
     {
         cuttingPlane                = GameObject.FindWithTag("cuttingPlane");
-        translationAxis             = GameObject.FindWithTag("translationAxis");
+        indexFingerText             = GameObject.FindWithTag("indexFinger");
+        middleFingerText            = GameObject.FindWithTag("middleFinger");
+        ringFingerText              = GameObject.FindWithTag("ringFinger");
+        littleFingerText            = GameObject.FindWithTag("littleFinger");
+        translationAxis             = GameObject.FindGameObjectsWithTag("translationAxis");
         opacityText                 = GameObject.FindGameObjectsWithTag("opacityText");
         slicerText                  = GameObject.FindGameObjectsWithTag("slicerText");
         spikes                      = GameObject.FindGameObjectsWithTag("spikes");
@@ -72,6 +76,9 @@ public class modes : MonoBehaviour
         for (int i=0; i<textTags.Length; i++){
             modeText[i] = GameObject.FindWithTag(textTags[i]).GetComponent<TMP_Text>();
         }
+        translationReferenceAxes[0].GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        translationReferenceAxes[1].GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+        translationReferenceAxes[2].GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
         mat1 = new Material[spikes.Length + envelope.Length + insides.Length];
         for (int i = 0; i < spikes.Length; i++){   
             spikes[i].GetComponent<Renderer>().material.SetColor("_Color", Color.red);   
@@ -94,7 +101,7 @@ public class modes : MonoBehaviour
     void LateUpdate()
     {
         // Set the current position and normal of the plane
-        changeTextOpacity();
+        changeModeTextOpacity();
         Debug.Log("Mode: " + mode);
         Debug.Log("In Mode: " + inMode);
         Debug.Log("ButtonDelta4: " + buttonDelta4);
@@ -118,7 +125,9 @@ public class modes : MonoBehaviour
             if (mode == "translation"){
                 // Reset Translation
                 body.transform.position = initialPosition;
-                translationAxis.transform.position = initialPosition;
+                for (int i=0; i<translationAxis.Length; i++){
+                    translationAxis[i].transform.position = initialPosition;
+                }
                 FliterUpdate.updateQuaternion(0.0f,0.0f,0.0f,1.0f);
             }
             if (mode == "slicing"){
@@ -149,34 +158,39 @@ public class modes : MonoBehaviour
             Debug.Log("Enter Rotation Mode");
             if (qx != null && qy != null && qz != null && qw != null)
             {
-                rotation(body);    
+                rotation(body);   
                 // checkPoseGoal(rotationGoalObj, body);
             }
+            setRotationPalmText();
         }
+        else{changeModeTextOpacity();}
         if (mode == "translation")
         {
             // checkPoseGoal(translationGoalObj, body);
             if (translation_method == "free"){
-                translationAxis.SetActive(true);
+                setGameObjectArrayActive(ref translationAxis, true);
                 translation_wrt_world(body);
             }
             else if (translation_method == "axis"){
-                translationAxis.SetActive(false);
+                setGameObjectArrayActive(ref translationAxis, false);
                 selectAxis(body);
-            }
-            for (int i=0; i<translationReferenceAxes.Length; i++){
-                if (translation_mode == i){
-                    translationReferenceAxes[i].GetComponent<Renderer>().material.SetFloat("_opacity", 1.0f);
+                setGameObjectArrayActive(ref translationReferenceAxes, true);
+                for (int i=0; i<translationReferenceAxes.Length; i++){
+                    if (translation_mode == i){
+                        translationReferenceAxes[i].GetComponent<Renderer>().material.SetFloat("_opacity", 1.0f);
+                    }
+                    else{
+                        translationReferenceAxes[i].GetComponent<Renderer>().material.SetFloat("_opacity", 0.5f);
+                    }
                 }
-                else{
-                    translationReferenceAxes[i].GetComponent<Renderer>().material.SetFloat("_opacity", 0.5f);
-                }
             }
+            setTranslationPalmText();
         }
         else{
             setGameObjectArrayActive(ref translationReferenceAxes, false);
             setGameObjectArrayActive(ref translationText, false);
-            translationAxis.SetActive(false);
+            setGameObjectArrayActive(ref translationAxis, false);
+            changeModeTextOpacity();
         }
         if (mode == "slicing")
         {
@@ -188,12 +202,13 @@ public class modes : MonoBehaviour
                 mat1[i].SetVector("_planePosition", cuttingPlane.transform.position);
                 mat1[i].SetVector("_planeNormal", cuttingPlane.transform.up);
             }
-            if (button2==1){
+            if (button1==1){
                 translation_wrt_gameObject(cuttingPlane, true);
             }
             if (button2==1){
                 translation_wrt_gameObject(cuttingPlane, false);
             }
+            setSlicingPalmText();
         }
         else{
             cuttingPlane.SetActive(false);
@@ -202,16 +217,19 @@ public class modes : MonoBehaviour
                 mat1[i].SetVector("_planePosition", new Vector3(0, 100000000 ,0));
                 mat1[i].SetVector("_planeNormal", new Vector3(0,-1,0));
             }
+            changeModeTextOpacity();
         }
         if (mode == "opacity")
         {
             // checkOpacityGoal();
             opacity();
             // Debug.Log(opacitySlider.SliderValue);
+            setOpacityPalmText();
         }
         else{
             opacitySlider.gameObject.SetActive(false);
             setGameObjectArrayActive(ref opacityText, false);
+            changeModeTextOpacity();
         }
     }
 
@@ -329,10 +347,8 @@ public class modes : MonoBehaviour
         buttonDelta2 = 0;
         inMode = true;
         mode = "translation";
-        translationAxis.SetActive(true);
         // disableGoalObjects();
         setGameObjectArrayActive(ref translationText, true);
-        setGameObjectArrayActive(ref translationReferenceAxes, true);
     }
 
     public void checkSlicingMode()
@@ -368,7 +384,7 @@ public class modes : MonoBehaviour
         translation_method = "free";
     }
 
-    void changeTextOpacity()
+    void changeModeTextOpacity()
     {
         for (int i = 0; i < modeText.Length; i++) {
             // If the current modeText GameObject has a tag that matches the current mode, set its color alpha value to 1.0f.
@@ -402,21 +418,23 @@ public class modes : MonoBehaviour
 
     void translation_wrt_world(GameObject obj)
     {
-        rotation(translationAxis);
-           if (button1==1){
-                body.transform.position += translationAxis.transform.TransformDirection(new Vector3(0.0f,0.01f*1.0f, 0.0f));
+        for (int i=0; i<translationAxis.Length; i++){
+            rotation(translationAxis[i]);
+            if (button1==1){
+                body.transform.position += translationAxis[i].transform.TransformDirection(new Vector3(0.0f,0.0f, 0.01f*1.0f));
             }
             if (button2==1){
-                body.transform.position -= translationAxis.transform.TransformDirection(new Vector3(0.0f,0.01f*1.0f, 0.0f));
+                body.transform.position -= translationAxis[i].transform.TransformDirection(new Vector3(0.0f,0.0f, 0.01f*1.0f));
             }
+        }
     }
 
     void translation_three_axis(GameObject obj)
     {
-        if (translation_mode == 0){
+        if (translation_mode == 1){
             obj.transform.position = obj.transform.position + new Vector3(0, 0, -scaling_factor*delta);
         }
-        else if (translation_mode == 1){
+        else if (translation_mode == 0){
             obj.transform.position = obj.transform.position + new Vector3(-scaling_factor*delta, 0, 0);
         }
         else if (translation_mode == 2){
@@ -525,6 +543,58 @@ public class modes : MonoBehaviour
         for (int i=0; i<obj.Length; i++){
             obj[i].SetActive(enable);
         }
+    }
+
+    void setDefaultPalmText()
+    {
+        indexFingerText.GetComponent<TMP_Text>().text = "Rotation";
+        middleFingerText.GetComponent<TMP_Text>().text = "Translation";
+        ringFingerText.GetComponent<TMP_Text>().text = "Slicer";
+        littleFingerText.GetComponent<TMP_Text>().text = "Opacity";
+    }
+
+    void setRotationPalmText()
+    {
+        indexFingerText.GetComponent<TMP_Text>().text = " ";
+        middleFingerText.GetComponent<TMP_Text>().text = " ";
+        ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
+        littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
+    }
+
+    void setTranslationPalmText()
+    {
+        if (translation_method == "free"){
+            indexFingerText.GetComponent<TMP_Text>().text = "Move Up";
+            indexFingerText.GetComponent<TMP_Text>().color = new Color((109f/255f), (109f/255f), 1f, 1.0f);
+            middleFingerText.GetComponent<TMP_Text>().text = "Move Down";
+            middleFingerText.GetComponent<TMP_Text>().color = new Color(1f, (250f/255f), (50f/255f), 1.0f);
+            ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
+            littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
+        }
+        else if(translation_method == "axis"){
+            indexFingerText.GetComponent<TMP_Text>().text = "Next Axis";
+            middleFingerText.GetComponent<TMP_Text>().text = "Previous Axis";
+            ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
+            littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
+        }
+    }
+
+    void setSlicingPalmText()
+    {
+        indexFingerText.GetComponent<TMP_Text>().text = "Move Up";
+        indexFingerText.GetComponent<TMP_Text>().color = new Color((109f/255f), (109f/255f), 1f, 1.0f);
+        middleFingerText.GetComponent<TMP_Text>().text = "Move Down";
+        middleFingerText.GetComponent<TMP_Text>().color = new Color(1f, (250f/255f), (50f/255f), 1.0f);
+        ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
+        littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
+    }
+
+    void setOpacityPalmText()
+    {
+        indexFingerText.GetComponent<TMP_Text>().text = " ";
+        middleFingerText.GetComponent<TMP_Text>().text = " ";
+        ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
+        littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
     }
 /*
     void disableGoalObjects()
