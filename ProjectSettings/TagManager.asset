@@ -28,6 +28,7 @@ TagManager:
   - middleFinger
   - ringFinger
   - littleFinger
+  - lava
   layers:
   - Default
   - TransparentFX
