@@ -14,6 +14,7 @@ public class BLEBehaviour : MonoBehaviour
     public Button ButtonStartScan;
     private fliterUpdate FliterUpdate;
     private modes Modes;
+    private rotate_board Rotate_board;
     private GameObject connectionPanel, modePanel;
     private bool clutch;
     
@@ -32,6 +33,8 @@ public class BLEBehaviour : MonoBehaviour
     string deviceId = null, remoteAngle = null;  
     float[] q = null, sensorData = null; 
     string[] rawIMUData = null;
+    string text_to_send, prev_mode;
+    Scene scene;
     IDictionary<string, string> discoveredDevices = new Dictionary<string, string>();
     int devicesCount = 0;
     byte[] valuesToWrite;
@@ -42,17 +45,31 @@ public class BLEBehaviour : MonoBehaviour
     void Start()
     {
         ble = new BLE();
+        scene = SceneManager.GetActiveScene();
         connectionPanel = GameObject.FindWithTag("connectionPanel");
         modePanel       = GameObject.FindWithTag("modePanel");
-        Modes                = GameObject.FindObjectOfType<modes>();
-        FliterUpdate                = GameObject.FindObjectOfType<fliterUpdate>();
+        Modes           = GameObject.FindObjectOfType<modes>();
+        Rotate_board    = GameObject.FindObjectOfType<rotate_board>();
+        FliterUpdate    = GameObject.FindObjectOfType<fliterUpdate>();
+        text_to_send = "Connect to HoloLens";
+        valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text_to_send);
 
         TextTargetDeviceConnection.text = targetDeviceName + " not found.";
         readingThread = new Thread(ReadBleData);
     }
 
     void Update()
-    {  
+    {
+        if (scene.name == "Demo"){
+            prev_mode = text_to_send;
+            text_to_send = Modes.getMode();
+            valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text_to_send);
+        }
+        else if(scene.name == "Labyrinth"){
+            prev_mode = text_to_send;
+            text_to_send = "Enjoy the game";
+            valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text_to_send);
+        }
         if (sensorData != null && sensorData.Length == 4)
         {
             if (sensorData[2]==0)
@@ -87,6 +104,9 @@ public class BLEBehaviour : MonoBehaviour
             if (ble.isConnected && isConnected)
             {
                 UpdateGuiText("writeData");
+                if (text_to_send != prev_mode){
+                    StartWritingHandler();
+                }
             }
             // Target device is connected, but GUI hasn't updated yet.
             else if (ble.isConnected && !isConnected)
@@ -247,10 +267,8 @@ public class BLEBehaviour : MonoBehaviour
             return;
         }
         
-        string text = "RUSTY";
-        valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text);
-        TextTargetDeviceData.text = "Writing some new: " + text;
-        Debug.Log("Writing some new: " + text);
+        TextTargetDeviceData.text = "Writing some new: " + text_to_send;
+        Debug.Log("Writing some new: " + text_to_send);
         
         writingThread = new Thread(WriteBleData);
         writingThread.Start();
@@ -264,6 +282,7 @@ public class BLEBehaviour : MonoBehaviour
             valuesToWrite);
         
         Debug.Log($"Writing status: {ok}. {BLE.GetError()}");
+        Thread.Sleep(25);
         writingThread = null;
     }
     
@@ -278,9 +297,14 @@ public class BLEBehaviour : MonoBehaviour
                 sensorData = new float[] {float.Parse(rawIMUData[6]), float.Parse(rawIMUData[7]), float.Parse(rawIMUData[8]), float.Parse(rawIMUData[9])};
             if (clutch == false){
                 q = FliterUpdate.updateFilter(rawIMUData);
+                // Cannot check the scene name here because it is not the main thread
                 if (q != null && Modes != null)
                 {
                     Modes.updateIMU(q, sensorData);
+                }
+                else if (sensorData != null && Rotate_board != null)
+                {
+                    Rotate_board.getButtonState(ref sensorData);
                 }
             }
         }

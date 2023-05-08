@@ -29,6 +29,10 @@ TagManager:
   - ringFinger
   - littleFinger
   - lava
+  - resetCountdown
+  - rotationText
+  - freeText
+  - axisText
   layers:
   - Default
   - TransparentFX

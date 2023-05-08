@@ -13,7 +13,7 @@ public class modes : MonoBehaviour
     private string translation_method;
     private float qx, qy, qz, qw, curr_theta, prev_theta, startTime, maintainTime, delta;
     private GameObject rotationGoalObj, translationGoalObj, slicerGoalObj, opacityGoalObj, indexFingerText, middleFingerText, ringFingerText, littleFingerText;
-    private GameObject[] opacityText, slicerText, translationText, translationReferenceAxes, resultText, spikes, envelope, insides, translationAxis;
+    private GameObject[] opacityText, rotationText, slicerText, translationText, translationReferenceAxes, resultText, spikes, envelope, insides, translationAxis, axisText, freeText;
     private bool goalFlag, inMode, resetFlag;
     private fliterUpdate FliterUpdate;
     private int button1, button2, button3, button4;
@@ -35,14 +35,17 @@ public class modes : MonoBehaviour
         middleFingerText            = GameObject.FindWithTag("middleFinger");
         ringFingerText              = GameObject.FindWithTag("ringFinger");
         littleFingerText            = GameObject.FindWithTag("littleFinger");
+        axisText                    = GameObject.FindGameObjectsWithTag("axisText");
+        freeText                    = GameObject.FindGameObjectsWithTag("freeText");
         translationAxis             = GameObject.FindGameObjectsWithTag("translationAxis");
         opacityText                 = GameObject.FindGameObjectsWithTag("opacityText");
+        rotationText                = GameObject.FindGameObjectsWithTag("rotationText");
+        translationText             = GameObject.FindGameObjectsWithTag("translationText");
         slicerText                  = GameObject.FindGameObjectsWithTag("slicerText");
         spikes                      = GameObject.FindGameObjectsWithTag("spikes");
         envelope                    = GameObject.FindGameObjectsWithTag("envelope");
         insides                     = GameObject.FindGameObjectsWithTag("insides");
         // resultText                  = GameObject.FindGameObjectsWithTag("result");
-        translationText             = GameObject.FindGameObjectsWithTag("translationText");
         translationReferenceAxes    = new GameObject[3];
         translationReferenceAxes[0] = GameObject.FindWithTag("RefX");
         translationReferenceAxes[1] = GameObject.FindWithTag("RefY");
@@ -109,6 +112,7 @@ public class modes : MonoBehaviour
         {
             inMode = false;
             mode = "menu";
+            translation_method = "noMode";
             buttonDelta4 = 0;
         }
         else if(inMode==false){
@@ -163,7 +167,10 @@ public class modes : MonoBehaviour
             }
             setRotationPalmText();
         }
-        else{changeModeTextOpacity();}
+        else{
+            changeModeTextOpacity();
+            setGameObjectArrayActive(ref rotationText, false);
+        }
         if (mode == "translation")
         {
             // checkPoseGoal(translationGoalObj, body);
@@ -184,11 +191,25 @@ public class modes : MonoBehaviour
                     }
                 }
             }
+            else if(translation_method == "noMode"){
+                // Check which mode the user wants to select
+                if (buttonDelta1==1){
+                    translation_method = "axis";
+                }
+                else if (buttonDelta2==1){
+                    translation_method = "free";
+                }
+            }
+            if (translation_method=="noMode"){setGameObjectArrayActive(ref translationText, true);}
+            else if(translation_method=="axis"){setGameObjectArrayActive(ref axisText, true);}
+            else if(translation_method=="free"){setGameObjectArrayActive(ref freeText, true);}
             setTranslationPalmText();
         }
         else{
             setGameObjectArrayActive(ref translationReferenceAxes, false);
             setGameObjectArrayActive(ref translationText, false);
+            setGameObjectArrayActive(ref axisText, false);
+            setGameObjectArrayActive(ref freeText, false);
             setGameObjectArrayActive(ref translationAxis, false);
             changeModeTextOpacity();
         }
@@ -339,6 +360,7 @@ public class modes : MonoBehaviour
         inMode = true;
         mode = "rotation";
         Debug.Log("Mode inside checkRotationMode: " + mode);
+        setGameObjectArrayActive(ref rotationText, true);
         // disableGoalObjects();
     }
 
@@ -348,7 +370,6 @@ public class modes : MonoBehaviour
         inMode = true;
         mode = "translation";
         // disableGoalObjects();
-        setGameObjectArrayActive(ref translationText, true);
     }
 
     public void checkSlicingMode()
@@ -577,6 +598,13 @@ public class modes : MonoBehaviour
             ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
             littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
         }
+        else if(translation_method == "noMode")
+        {
+            indexFingerText.GetComponent<TMP_Text>().text = "3 Axis Mode";
+            middleFingerText.GetComponent<TMP_Text>().text = "Free Mode";
+            ringFingerText.GetComponent<TMP_Text>().text = " ";
+            littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
+        }
     }
 
     void setSlicingPalmText()
@@ -643,6 +671,11 @@ public class modes : MonoBehaviour
     public float[] getButtonState()
     {
         return new float[] {button1, button2, button3, button4};
+    }
+
+    public string getMode()
+    {
+        return mode;
     }
 
     public void reset()

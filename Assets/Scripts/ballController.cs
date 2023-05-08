@@ -5,27 +5,37 @@ using UnityEngine;
 public class ballController : MonoBehaviour
 {
     private Vector3 initialPosition;
+    private GameObject[] lava;
     // Start is called before the first frame update
     void Start()
     {   
-        initialPosition = transform.localPosition;       
+        initialPosition = transform.localPosition; 
+        lava = GameObject.FindGameObjectsWithTag("lava");      
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Checking Update");
-        Debug.Log("Checking position");
-        if ((transform.localPosition.y > 50f) || (transform.localPosition.y < -50f))
+        if ((transform.localPosition.y > 50f) || (transform.localPosition.y < -50f) || (transform.localPosition.x > 50f) || (transform.localPosition.x < -50f) || (transform.localPosition.y > 50f) || (transform.localPosition.y < -50f))
         {
-        Debug.Log("Ball out of bounds");
-        transform.localPosition = new Vector3(initialPosition.x, initialPosition.y, initialPosition.z-1f);
-        checkPosition();
+            reset_position();
         }
     }
-    
-    IEnumerator checkPosition()
+
+    public void reset_position()
     {
-        yield return new WaitForSeconds(1);
+        gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        transform.localPosition = new Vector3(initialPosition.x, initialPosition.y, initialPosition.z-1f);
     }
+
+    // Reset Position when ball collides with lava
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "lava")
+        {
+            reset_position();
+        }
+    }
+
 }
