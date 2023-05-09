@@ -53,7 +53,7 @@ public class BLEBehaviour : MonoBehaviour
         text_to_send = "Connect to HoloLens";
         valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text_to_send);
 
-        TextTargetDeviceConnection.text = targetDeviceName + " not found.";
+        // TextTargetDeviceConnection.text = targetDeviceName + " not found.";
         readingThread = new Thread(ReadBleData);
     }
 
@@ -107,6 +107,7 @@ public class BLEBehaviour : MonoBehaviour
                     StartWritingHandler();
                 }
                 connectionPanel.SetActive(false);
+                modePanel.SetActive(true);
             }
                 // Target device is connected, but GUI hasn't updated yet.
             else if (ble.isConnected && !isConnected)

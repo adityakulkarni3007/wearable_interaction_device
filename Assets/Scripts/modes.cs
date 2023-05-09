@@ -98,6 +98,8 @@ public class modes : MonoBehaviour
             insides[i].GetComponent<Renderer>().material.SetColor("_Color", new Color(1.0f, 1.0f, 0.0f, 1.0f));
             mat1[i + spikes.Length + envelope.Length] = insides[i].GetComponent<Renderer>().material;
         }
+        GameObject modePanel = GameObject.FindWithTag("modePanel");
+        modePanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -200,12 +202,23 @@ public class modes : MonoBehaviour
                     translation_method = "free";
                 }
             }
-            if (translation_method=="noMode"){setGameObjectArrayActive(ref translationText, true);}
-            else if(translation_method=="axis"){setGameObjectArrayActive(ref axisText, true);}
-            else if(translation_method=="free"){setGameObjectArrayActive(ref freeText, true);}
+            if (translation_method=="noMode"){
+                setGameObjectArrayActive(ref translationText, true);
+            }
+            else if(translation_method=="axis"){
+                setGameObjectArrayActive(ref axisText, true);
+                setGameObjectArrayActive(ref freeText, false);
+                setGameObjectArrayActive(ref translationText, false);
+            }
+            else if(translation_method=="free"){
+                setGameObjectArrayActive(ref freeText, true);
+                setGameObjectArrayActive(ref axisText, false);
+                setGameObjectArrayActive(ref translationText, false);
+            }
             setTranslationPalmText();
         }
         else{
+            translation_method = "noMode";
             setGameObjectArrayActive(ref translationReferenceAxes, false);
             setGameObjectArrayActive(ref translationText, false);
             setGameObjectArrayActive(ref axisText, false);
@@ -585,9 +598,9 @@ public class modes : MonoBehaviour
     void setTranslationPalmText()
     {
         if (translation_method == "free"){
-            indexFingerText.GetComponent<TMP_Text>().text = "Move Up";
+            indexFingerText.GetComponent<TMP_Text>().text = "Move";
             indexFingerText.GetComponent<TMP_Text>().color = new Color((109f/255f), (109f/255f), 1f, 1.0f);
-            middleFingerText.GetComponent<TMP_Text>().text = "Move Down";
+            middleFingerText.GetComponent<TMP_Text>().text = "Move";
             middleFingerText.GetComponent<TMP_Text>().color = new Color(1f, (250f/255f), (50f/255f), 1.0f);
             ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
             littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
@@ -609,9 +622,9 @@ public class modes : MonoBehaviour
 
     void setSlicingPalmText()
     {
-        indexFingerText.GetComponent<TMP_Text>().text = "Move Up";
+        indexFingerText.GetComponent<TMP_Text>().text = "Move";
         indexFingerText.GetComponent<TMP_Text>().color = new Color((109f/255f), (109f/255f), 1f, 1.0f);
-        middleFingerText.GetComponent<TMP_Text>().text = "Move Down";
+        middleFingerText.GetComponent<TMP_Text>().text = "Move";
         middleFingerText.GetComponent<TMP_Text>().color = new Color(1f, (250f/255f), (50f/255f), 1.0f);
         ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
         littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
