@@ -106,6 +106,7 @@ public class BLEBehaviour : MonoBehaviour
                     Debug.Log("text_to_send: " + text_to_send + " prev_mode: " + prev_mode);
                     StartWritingHandler();
                 }
+                connectionPanel.SetActive(false);
             }
                 // Target device is connected, but GUI hasn't updated yet.
             else if (ble.isConnected && !isConnected)
@@ -116,7 +117,6 @@ public class BLEBehaviour : MonoBehaviour
             } else if (!isConnected)
             {
                 TextTargetDeviceConnection.text = "Found target device:\n" + targetDeviceName;
-                connectionPanel.SetActive(false);
             } 
         }
     }
@@ -201,6 +201,7 @@ public class BLEBehaviour : MonoBehaviour
         }
         if (ble.isConnected)
             Debug.Log("Connected to: " + targetDeviceName);
+
     }
     
     void UpdateGuiText(string action)

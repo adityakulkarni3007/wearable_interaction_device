@@ -32,7 +32,7 @@ public class rotate_board : MonoBehaviour
     {
         Debug.Log("inGame: " + inGame);
         updateQuaternion();
-        Debug.Log("qw: " + qw + " qx: " + qx + " qy: " + qy + " qz: " + qz);
+        Debug.Log("ButtonDelta1: " + buttonDelta1 + "ButtonDelta2: " + buttonDelta2 + "ButtonDelta3: " + buttonDelta3 + "ButtonDelta4: "+ buttonDelta4);
         if (inGame){
             rotation(body);
         }
@@ -58,6 +58,11 @@ public class rotate_board : MonoBehaviour
     public void stopGame()
     {
         inGame = false;
+        StartCoroutine(reset_board());
+    }
+
+    public void resetbutton()
+    {
         StartCoroutine(reset_board());
     }
 
