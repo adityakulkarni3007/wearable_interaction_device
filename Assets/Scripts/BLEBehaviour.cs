@@ -11,7 +11,6 @@ using UnityEngine.SceneManagement;
 public class BLEBehaviour : MonoBehaviour
 {
     public TMP_Text TextIsScanning, TextTargetDeviceConnection, TextTargetDeviceData, TextDiscoveredDevices;
-    public Button ButtonStartScan;
     private fliterUpdate FliterUpdate;
     private modes Modes;
     private rotate_board Rotate_board;
@@ -60,16 +59,6 @@ public class BLEBehaviour : MonoBehaviour
 
     void Update()
     {
-        if (scene.name == "Demo"){
-            prev_mode = text_to_send;
-            text_to_send = Modes.getMode();
-            valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text_to_send);
-        }
-        else if(scene.name == "Labyrinth"){
-            prev_mode = text_to_send;
-            text_to_send = "Enjoy the game";
-            valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text_to_send);
-        }
         if (sensorData != null && sensorData.Length == 4)
         {
             if (sensorData[2]==0)
@@ -78,7 +67,6 @@ public class BLEBehaviour : MonoBehaviour
             }
             else{clutch = false;}
             Debug.Log("clutch: " + clutch);
-            Debug.Log("sensorData: " + sensorData[0] + " " + sensorData[1] + " " + sensorData[2] + " " + sensorData[3]);
         }
         if (isScanning)
         {
@@ -104,11 +92,22 @@ public class BLEBehaviour : MonoBehaviour
             if (ble.isConnected && isConnected)
             {
                 UpdateGuiText("writeData");
+                if (scene.name == "Demo"){
+                prev_mode = text_to_send;
+                text_to_send = Modes.getMode();
+                valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text_to_send);
+                }
+                else if(scene.name == "Labryinth"){
+                    prev_mode = text_to_send;
+                    text_to_send = "Enjoy the game";
+                    valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text_to_send);
+                }
                 if (text_to_send != prev_mode){
+                    Debug.Log("text_to_send: " + text_to_send + " prev_mode: " + prev_mode);
                     StartWritingHandler();
                 }
             }
-            // Target device is connected, but GUI hasn't updated yet.
+                // Target device is connected, but GUI hasn't updated yet.
             else if (ble.isConnected && !isConnected)
             {
                 UpdateGuiText("connected");
@@ -145,7 +144,10 @@ public class BLEBehaviour : MonoBehaviour
             if (!discoveredDevices.ContainsKey(_deviceId))
             {
                 Debug.Log("found device with name: " + deviceName);
-                discoveredDevices.Add(_deviceId, deviceName);
+                // if (deviceName == targetDeviceName)
+                // {
+                    discoveredDevices.TryAdd(_deviceId, deviceName);
+                // }
             }
 
             if (deviceId == null && deviceName == targetDeviceName)
@@ -264,6 +266,7 @@ public class BLEBehaviour : MonoBehaviour
         if (deviceId == "-1" || !isConnected || (writingThread?.IsAlive ?? false))
         {
             Debug.Log("Cannot write yet");
+            Debug.Log("DeviceID: " + deviceId + "\nIsConnected: " + isConnected);
             return;
         }
         
@@ -282,7 +285,7 @@ public class BLEBehaviour : MonoBehaviour
             valuesToWrite);
         
         Debug.Log($"Writing status: {ok}. {BLE.GetError()}");
-        Thread.Sleep(25);
+        // Thread.Sleep(25);
         writingThread = null;
     }
     
@@ -291,7 +294,7 @@ public class BLEBehaviour : MonoBehaviour
         byte[] packageReceived = BLE.ReadPackage();
         remoteAngle = System.Text.Encoding.ASCII.GetString(packageReceived).TrimEnd('\0');
         rawIMUData = remoteAngle.Split(",");
-        Debug.Log("Length: " + rawIMUData.Length);
+        Debug.Log("Received: " + remoteAngle);
             if (rawIMUData != null && rawIMUData.Length >= 10)
             {
                 sensorData = new float[] {float.Parse(rawIMUData[6]), float.Parse(rawIMUData[7]), float.Parse(rawIMUData[8]), float.Parse(rawIMUData[9])};

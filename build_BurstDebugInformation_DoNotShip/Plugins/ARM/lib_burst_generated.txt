@@ -171,6 +171,7 @@ Library: lib_burst_generated
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Microsoft.MixedReality.Toolkit.Services.InputSimulation.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.XR.OpenXR.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Timeline.dll
+--root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Mathematics.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Microsoft.MixedReality.Toolkit.SDK.Experimental.Interactive.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Services.Core.Scheduler.dll
@@ -192,7 +193,6 @@ Library: lib_burst_generated
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Services.Core.Configuration.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\UnityEngine.SpatialTracking.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\UnityEngine.XR.LegacyInputHelpers.dll
---root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Microsoft.MixedReality.Toolkit.Services.SpatialAwarenessSystem.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Services.Core.Networking.dll
@@ -201,6 +201,7 @@ Library: lib_burst_generated
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Microsoft.MixedReality.Toolkit.Providers.WindowsVoiceInput.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.XR.OpenXR.Features.ConformanceAutomation.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Services.Core.Registration.dll
+--root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Microsoft.MixedReality.Toolkit.Demos.UX.Interactables.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.XR.OpenXR.Features.MockRuntime.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.Subsystem.Registration.dll
 --root-assembly=C:\Code\Unity\BleWinrtDll\BleWinrtDll Unity\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll

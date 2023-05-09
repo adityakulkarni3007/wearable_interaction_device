@@ -16,7 +16,7 @@ public class ballController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((transform.localPosition.y > 50f) || (transform.localPosition.y < -50f) || (transform.localPosition.x > 50f) || (transform.localPosition.x < -50f) || (transform.localPosition.y > 50f) || (transform.localPosition.y < -50f))
+        if ((transform.localPosition.y > 10f) || (transform.localPosition.y < -10f) || (transform.localPosition.x > 10f) || (transform.localPosition.x < -10f) || (transform.localPosition.y > 10f) || (transform.localPosition.y < -10f))
         {
             reset_position();
         }

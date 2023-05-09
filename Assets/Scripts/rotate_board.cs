@@ -30,7 +30,9 @@ public class rotate_board : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("inGame: " + inGame);
         updateQuaternion();
+        Debug.Log("qw: " + qw + " qx: " + qx + " qy: " + qy + " qz: " + qz);
         if (inGame){
             rotation(body);
         }
@@ -49,6 +51,7 @@ public class rotate_board : MonoBehaviour
     }
     public void startGame()
     {
+        Debug.Log("Game Started");
         inGame = true;
     }
 
