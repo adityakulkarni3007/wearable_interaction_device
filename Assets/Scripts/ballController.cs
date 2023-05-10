@@ -6,11 +6,13 @@ public class ballController : MonoBehaviour
 {
     private Vector3 initialPosition;
     private GameObject[] lava;
+    private rotate_board RotateBoard;
     // Start is called before the first frame update
     void Start()
     {   
         initialPosition = transform.localPosition; 
-        lava = GameObject.FindGameObjectsWithTag("lava");      
+        lava = GameObject.FindGameObjectsWithTag("lava");  
+        RotateBoard     = GameObject.FindObjectOfType<rotate_board>();
     }
 
     // Update is called once per frame
@@ -35,6 +37,10 @@ public class ballController : MonoBehaviour
         if (collision.gameObject.tag == "lava")
         {
             reset_position();
+        }
+        if (collision.gameObject.tag == "goalObj")
+        {
+            RotateBoard.reachedGoal();
         }
     }
 
