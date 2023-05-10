@@ -20,7 +20,7 @@ public class rotate_board : MonoBehaviour
         body            = GameObject.FindWithTag("ground");
         resetText       = GameObject.FindWithTag("resetCountdown");
         goalText        = GameObject.FindWithTag("goalText");
-        goalObj         = GameObject.FindWithTag("goal");
+        goalObj         = GameObject.FindWithTag("goalObj");
         FliterUpdate    = GameObject.FindObjectOfType<fliterUpdate>();
         BallController  = GameObject.FindObjectOfType<ballController>();
         updateQuaternion();
