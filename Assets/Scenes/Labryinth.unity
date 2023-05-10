@@ -1403,8 +1403,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283190527
-  m_fontColor: {r: 1, g: 0.29622638, b: 0.29622638, a: 1}
+    rgba: 4283170635
+  m_fontColor: {r: 0.29411766, g: 1, b: 0.29411766, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1831,7 +1831,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 227270266}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 127, y: -1112, z: -31.667034}
+  m_LocalPosition: {x: 169, y: -1251, z: -31.667034}
   m_LocalScale: {x: 814.9817, y: 838.6308, z: 75.64285}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3480,7 +3480,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 466955501}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 127, y: -1112, z: -31.667034}
+  m_LocalPosition: {x: 169, y: -1152.4, z: -31.667034}
   m_LocalScale: {x: 814.9817, y: 838.6308, z: 75.64285}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11216,6 +11216,7 @@ MonoBehaviour:
   resetText: {fileID: 0}
   goalText: {fileID: 0}
   goalObj: {fileID: 0}
+  ball: {fileID: 0}
 --- !u!114 &1655449280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12847,7 +12848,7 @@ GameObject:
   - component: {fileID: 1969473961}
   m_Layer: 0
   m_Name: Ball
-  m_TagString: Untagged
+  m_TagString: ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
