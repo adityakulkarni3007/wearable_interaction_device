@@ -12,19 +12,22 @@ public class rotate_board : MonoBehaviour
     private ballController BallController;
     private float button1, button2, button3, button4, b1_prev, b2_prev, b3_prev, b4_prev;
     private float buttonDelta1, buttonDelta2, buttonDelta3, buttonDelta4;
-    public GameObject resetText;
+    public GameObject resetText, goalText, goalObj;
 
     // Start is called before the first frame update
     void Start()
     {
         body            = GameObject.FindWithTag("ground");
         resetText       = GameObject.FindWithTag("resetCountdown");
+        goalText        = GameObject.FindWithTag("goalText");
+        goalObj         = GameObject.FindWithTag("goal");
         FliterUpdate    = GameObject.FindObjectOfType<fliterUpdate>();
         BallController  = GameObject.FindObjectOfType<ballController>();
         updateQuaternion();
         rotation(body);
-        inGame          = false;
+        inGame  = false;
         resetText.SetActive(false);
+        goalText.SetActive(false);
     }
 
     // Update is called once per frame
@@ -49,6 +52,7 @@ public class rotate_board : MonoBehaviour
         qy = q[2];
         qz = q[3];
     }
+
     public void startGame()
     {
         Debug.Log("Game Started");
@@ -66,6 +70,13 @@ public class rotate_board : MonoBehaviour
         StartCoroutine(reset_board());
     }
 
+    public void reachedGoal()
+    {
+        goalText.SetActive(true);
+        goalText.GetComponent<TMP_Text>().text = "Reached Goal!";
+        stopGame();
+    }
+
     IEnumerator reset_board()
     {
         // Everything in this function below the yield return statement will be affected by the delay
@@ -81,6 +92,7 @@ public class rotate_board : MonoBehaviour
         updateQuaternion();
         rotation(body);
         BallController.reset_position();
+        goalText.SetActive(false);
     }
 
     public void getButtonState(ref float[] data)
