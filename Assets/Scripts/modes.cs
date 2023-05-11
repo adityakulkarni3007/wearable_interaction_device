@@ -58,7 +58,7 @@ public class modes : MonoBehaviour
         goalFlag                    = false;
         translation_mode            = 0;
         body                        = GameObject.FindWithTag("body");
-        scaling_factor              = 0.01f;
+        scaling_factor              = 0.1f;
         maintainTime                = 0.0f;
         curr_theta                  = 0.0f; 
         prev_theta                  = 0.0f;
