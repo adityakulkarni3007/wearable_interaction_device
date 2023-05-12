@@ -24,6 +24,7 @@ public class ballController : MonoBehaviour
         }
     }
 
+    // Reset the position of the ball to the initial position
     public void reset_position()
     {
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;

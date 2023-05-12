@@ -10,34 +10,35 @@ using UnityEngine.SceneManagement;
 
 public class BLEBehaviour : MonoBehaviour
 {
-    public TMP_Text TextIsScanning, TextTargetDeviceConnection, TextTargetDeviceData, TextDiscoveredDevices;
+    // Import other scripts
+    private rotate_board Rotate_board;
     private fliterUpdate FliterUpdate;
     private modes Modes;
-    private rotate_board Rotate_board;
+    Scene scene;
+    // Text Variables
+    public TMP_Text TextIsScanning, TextTargetDeviceConnection, TextTargetDeviceData, TextDiscoveredDevices;
     private GameObject connectionPanel, modePanel;
-    private bool clutch;
-    
-    // Change this to match your device.
+    // Device specific BLE variables
     string targetDeviceName = "ESP32-RUST";
     string serviceUuid = "{4fafc201-1fb5-459e-8fcc-c5c9c331914b}";
     string[] characteristicUuids = {
         "{beb5483e-36e1-4688-b7f5-ea07361b26a8}",      // CUUID 1
-        //    "{00002a01-0000-1000-8000-00805f9b34fb}",       // CUUID 2
-        //   "{00002a57-0000-1000-8000-00805f9b34fb}",       // CUUID 3
     };
-
+    // BLE variables
     BLE ble;
     BLE.BLEScan scan;
-    bool isScanning = false, isConnected = false;
-    string deviceId = null, remoteAngle = null;  
-    float[] q = null, sensorData = null; 
-    string[] rawIMUData = null;
-    string text_to_send, prev_mode;
-    Scene scene;
     IDictionary<string, string> discoveredDevices = new Dictionary<string, string>();
     int devicesCount = 0;
+    string deviceId = null;
+    bool isScanning = false, isConnected = false;
+    // IMU Variables
+    string remoteAngle = null;
+    float[] q = null, sensorData = null; 
+    string[] rawIMUData = null;
+    private bool clutch;
+    // Variables for the writing thread
     byte[] valuesToWrite;
-
+    string text_to_send, prev_mode;
     // BLE Threads 
     Thread scanningThread, connectionThread, readingThread, writingThread;
     
@@ -52,13 +53,12 @@ public class BLEBehaviour : MonoBehaviour
         FliterUpdate    = GameObject.FindObjectOfType<fliterUpdate>();
         text_to_send = "Connect to HoloLens";
         valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text_to_send);
-
-        // TextTargetDeviceConnection.text = targetDeviceName + " not found.";
         readingThread = new Thread(ReadBleData);
     }
 
     void Update()
     {
+        // Check if the clutch is pressed
         if (sensorData != null && sensorData.Length == 4)
         {
             if (sensorData[2]==0)
@@ -68,6 +68,7 @@ public class BLEBehaviour : MonoBehaviour
             else{clutch = false;}
             Debug.Log("clutch: " + clutch);
         }
+        // Update the scanning status
         if (isScanning)
         {
             if (discoveredDevices.Count > devicesCount)
@@ -92,6 +93,7 @@ public class BLEBehaviour : MonoBehaviour
             if (ble.isConnected && isConnected)
             {
                 UpdateGuiText("writeData");
+                // Send different text to display on the OLED screen depending on the scene 
                 if (scene.name == "Demo"){
                 prev_mode = text_to_send;
                 text_to_send = Modes.getMode();
@@ -102,6 +104,7 @@ public class BLEBehaviour : MonoBehaviour
                     text_to_send = "Enjoy the game";
                     valuesToWrite = System.Text.Encoding.ASCII.GetBytes(text_to_send);
                 }
+                // Only write data to the device if the mode has changed to manage latency
                 if (text_to_send != prev_mode){
                     Debug.Log("text_to_send: " + text_to_send + " prev_mode: " + prev_mode);
                     StartWritingHandler();
@@ -115,17 +118,19 @@ public class BLEBehaviour : MonoBehaviour
                 UpdateGuiText("connected");
                 isConnected = true;
                 // Device was found, but not connected yet. 
-            } else if (!isConnected)
+            } 
+            else if (!isConnected)
             {
                 TextTargetDeviceConnection.text = "Found target device:\n" + targetDeviceName;
-            } 
+            }
         }
     }
     
+    // BLE FUNCTIONS
     public void StartScanHandler()
     {
         devicesCount = 0;
-        isScanning = true;
+        isScanning   = true;
         discoveredDevices.Clear();
         scanningThread = new Thread(ScanBleDevices);
         scanningThread.Start();
@@ -145,10 +150,7 @@ public class BLEBehaviour : MonoBehaviour
             if (!discoveredDevices.ContainsKey(_deviceId))
             {
                 Debug.Log("found device with name: " + deviceName);
-                // if (deviceName == targetDeviceName)
-                // {
                     discoveredDevices.TryAdd(_deviceId, deviceName);
-                // }
             }
 
             if (deviceId == null && deviceName == targetDeviceName)
@@ -225,42 +227,8 @@ public class BLEBehaviour : MonoBehaviour
                     readingThread = new Thread(ReadBleData);
                     readingThread.Start();
                 }
-                // if (remoteAngle != lastRemoteAngle)
-                // {
-                //     TextTargetDeviceData.text = "Remote angle: " + remoteAngle;
-                //     lastRemoteAngle = remoteAngle;
-                // }
                 break;
         }
-    }
-    
-    private void OnDestroy()
-    {
-        CleanUp();
-    }
-
-    private void OnApplicationQuit()
-    {
-        CleanUp();
-    }
-
-    // Prevent threading issues and free BLE stack.
-    // Can cause Unity to freeze and lead
-    // to errors when omitted.
-    private void CleanUp()
-    {
-        try
-        {
-            scan.Cancel();
-            ble.Close();
-            scanningThread.Abort();
-            connectionThread.Abort();
-            readingThread.Abort();
-            writingThread.Abort();
-        } catch(NullReferenceException e)
-        {
-            Debug.Log("Thread or object never initialized.\n" + e);
-        }        
     }
 
     public void StartWritingHandler()
@@ -287,7 +255,6 @@ public class BLEBehaviour : MonoBehaviour
             valuesToWrite);
         
         Debug.Log($"Writing status: {ok}. {BLE.GetError()}");
-        // Thread.Sleep(25);
         writingThread = null;
     }
     
@@ -295,20 +262,18 @@ public class BLEBehaviour : MonoBehaviour
     {
         byte[] packageReceived = BLE.ReadPackage();
         remoteAngle = System.Text.Encoding.ASCII.GetString(packageReceived).TrimEnd('\0');
+        // Package received in the format: "ax, ay, az, gx, gy, gz, button1, button2, button3, button4"
         rawIMUData = remoteAngle.Split(",");
         Debug.Log("Received: " + remoteAngle);
-            if (rawIMUData != null && rawIMUData.Length >= 10)
-            {
-                sensorData = new float[] {float.Parse(rawIMUData[6]), float.Parse(rawIMUData[7]), float.Parse(rawIMUData[8]), float.Parse(rawIMUData[9])};
+        if (rawIMUData != null && rawIMUData.Length >= 10)
+        {
+            sensorData = new float[] {float.Parse(rawIMUData[6]), float.Parse(rawIMUData[7]), float.Parse(rawIMUData[8]), float.Parse(rawIMUData[9])};
             if (clutch == false){
                 q = FliterUpdate.updateFilter(rawIMUData);
-                // Cannot check the scene name here because it is not the main thread
-                if (q != null && Modes != null)
-                {
+                if (q != null && Modes != null){
                     Modes.updateIMU(q, sensorData);
                 }
-                else if (sensorData != null && Rotate_board != null)
-                {
+                else if (sensorData != null && Rotate_board != null){
                     Rotate_board.getButtonState(ref sensorData);
                 }
             }
@@ -316,6 +281,37 @@ public class BLEBehaviour : MonoBehaviour
         Thread.Sleep(25);
     }
 
+    // CLEANUP FUNCTIONS
+    // Prevent threading issues and free BLE stack.
+    // Can cause Unity to freeze and lead
+    // to errors when omitted.
+    private void CleanUp()
+    {
+        try
+        {
+            scan.Cancel();
+            ble.Close();
+            scanningThread.Abort();
+            connectionThread.Abort();
+            readingThread.Abort();
+            writingThread.Abort();
+        } catch(NullReferenceException e)
+        {
+            Debug.Log("Thread or object never initialized.\n" + e);
+        }        
+    }
+
+    private void OnDestroy()
+    {
+        CleanUp();
+    }
+
+    private void OnApplicationQuit()
+    {
+        CleanUp();
+    }
+
+    // FUNCTIONS TO SWITCH SCENES
     public void LabryinthScene() {
         CleanUp();
         SceneManager.LoadScene(sceneName:"Labryinth");

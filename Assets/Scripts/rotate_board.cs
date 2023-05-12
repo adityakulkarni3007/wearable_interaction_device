@@ -45,6 +45,7 @@ public class rotate_board : MonoBehaviour
         if (buttonDelta4 == 1){StartCoroutine(reset_board());}
     }
 
+    // Get the quaternion from the filter and rotate the board
     void updateQuaternion()
     {
         float[] q = FliterUpdate.getQuaternion();
@@ -98,12 +99,16 @@ public class rotate_board : MonoBehaviour
         BallController.reset_position();
     }
 
+    // Get the button state from the filter
     public void getButtonState(ref float[] data)
     {
+        // buttons are pullup
         button1 = data[0];
         button2 = data[1];
         button3 = data[2];
         button4 = data[3];
+
+        // buttonDelta only activates once when a button is pressed
         if (b1_prev!=button1) {buttonDelta1 = button1;}
         else{buttonDelta1 = 0;}
         b1_prev = button1;
@@ -118,6 +123,7 @@ public class rotate_board : MonoBehaviour
         b4_prev = button4;
     }
 
+    // Rotate the board
     void rotation(GameObject obj)
     {
         // Unity accepts x,y,z,w
