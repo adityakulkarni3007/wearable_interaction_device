@@ -23,6 +23,7 @@ The 3.7V battery and the SSD1306 OLED display are mounted at the back of the wri
 2. Open Unity, import TextMeshPro and add restore features using the Mixed Reality Feature Tool. The features that would be restored are: Mixed Reality Toolkit Examples, Mixed Reality Toolkit Extentions, Mixed Reality Toolkit Foundation, Mixed Reality Toolkit Standard Assets and Mixed Reality OpenXR Plugin.
 3. Change the build settings to the following configuration:
 <img src="images/buildConfiguration.png" width="60%" height="60%" style="display: block; margin: 0 auto">
+
 4. Open the .sln file in Visual Studio, set the Solution Configuration to Release, the Solution Platform to ARM64 and Deploy to HoloLens2 using your preferred device.
 5. Once in the game, select a scene: Demo or Labyrinth. After connecting to BlueTooth using the connection UI, the application would switch to the scene-specific UI to interact with virtual content.
 7. The demo scene contains the following modes:
