@@ -32,4 +32,3 @@ The 3.7V battery and the SSD1306 OLED display are mounted at the back of the wri
 7. To switch between scenes, restart the application and repeat step 5.
 8. Enjoy the application!
 <img src="images/coolSlice.png" width="50%" height="50%" style="display: block; margin: 0 auto">
-<img src="images/Labyrinth.png" width="50%" height="50%" style="display: block; margin: 0 auto">
