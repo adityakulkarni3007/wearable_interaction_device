@@ -29,6 +29,7 @@ The 3.7V battery and the SSD1306 OLED display are mounted at the back of the wri
 <p align="center">
   <img src="images/buildConfiguration.png" width="60%" height="60%" style="display: block; margin: 0 auto">
 </p>
+
 ##### 4. Open the .sln file in Visual Studio, set the Solution Configuration to Release, the Solution Platform to ARM64 and Deploy to HoloLens2 using your preferred device.
 ##### 5. Once in the game, select a scene: Demo or Labyrinth. After connecting to BlueTooth using the connection UI, the application would switch to the scene-specific UI to interact with virtual content.
 ##### 6. The demo scene contains the following modes:
