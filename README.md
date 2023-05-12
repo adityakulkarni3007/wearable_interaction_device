@@ -3,6 +3,7 @@
 Our team has developed an innovative AR device in the form of a wearable glove that offers a unique and natural way to interact with virtual content. The device utilizes inertial sensors to accurately track the orientation of the user's wrist, providing a high level of precision in movement. The device's multi-modal interaction approach combines the established HoloLens AirTap gestures with our device's intuitive gestures. The latter employs a combination of inertial sensor data and finger taps, enabling a hybrid approach that lies between embodied gestures and handheld devices. This combination of modalities offers an intuitive and seamless means of interacting with virtual content, enhancing the user experience and productivity. Through this approach, we aim to bridge the gap between the virtual and physical worlds, providing a more natural and immersive AR experience.
 <p align="center">
   <img src="images/Hardware.jpg" width="35%" height="35%">
+  The Wearable Interaction Device
 </p>
 
 ## Hardware Implementation
@@ -21,22 +22,23 @@ The 3.7V battery and the SSD1306 OLED display are mounted at the back of the wri
 - Visual Studio 2019
 
 ## Replicating the demo
-#### 1. Upload the Arduino code (provided in the repo) to ESP32-C3. Make sure that Serial communication is not enables since it interferes with the BLE channel. 
-#### 2. Open Unity, import TextMeshPro and add restore features using the Mixed Reality Feature Tool. The features that would be restored are: Mixed Reality Toolkit Examples, Mixed Reality Toolkit Extentions, Mixed Reality Toolkit Foundation, Mixed Reality Toolkit Standard Assets and Mixed Reality OpenXR Plugin.
-#### 3. Change the build settings to the following configuration:
+##### 1. Upload the Arduino code (provided in the repo) to ESP32-C3. Make sure that Serial communication is not enables since it interferes with the BLE channel. 
+##### 2. Open Unity, import TextMeshPro and add restore features using the Mixed Reality Feature Tool. The features that would be restored are: Mixed Reality Toolkit Examples, Mixed Reality Toolkit Extentions, Mixed Reality Toolkit Foundation, Mixed Reality Toolkit Standard Assets and Mixed Reality OpenXR Plugin.
+##### 3. Change the build settings to the following configuration:
 <p align="center">
   <img src="images/buildConfiguration.png" width="60%" height="60%" style="display: block; margin: 0 auto">
+  Build Configuration
 </p>
   
-#### 4. Open the .sln file in Visual Studio, set the Solution Configuration to Release, the Solution Platform to ARM64 and Deploy to HoloLens2 using your preferred device.
-#### 5. Once in the game, select a scene: Demo or Labyrinth. After connecting to BlueTooth using the connection UI, the application would switch to the scene-specific UI to interact with virtual content.
-#### 6. The demo scene contains the following modes:
+##### 4. Open the .sln file in Visual Studio, set the Solution Configuration to Release, the Solution Platform to ARM64 and Deploy to HoloLens2 using your preferred device.
+##### 5. Once in the game, select a scene: Demo or Labyrinth. After connecting to BlueTooth using the connection UI, the application would switch to the scene-specific UI to interact with virtual content.
+##### 6. The demo scene contains the following modes:
 - Rotation: Virtual content will mirror the user's wrist movement.
 - Translation: Choose between 3-Axis and Free Movement.
 - Slicing: Use wrist movement to rotate the cutting plane and use fingerTaps to move it along the normal of the cutting plane.
 - Opacity: Rotate the wrist to change the opacity of virtual conent. (Slider-based applications)
-#### 7. To switch between scenes, restart the application and repeat step 5.
-#### 8. Enjoy the application!
+##### 7. To switch between scenes, restart the application and repeat step 5.
+##### 8. Enjoy the application!
 <p align="center">
   <img src="images/coolSlice.png" width="50%" height="50%" style="display: block; margin: 0 auto">
 </p>  
