@@ -31,10 +31,10 @@ The 3.7V battery and the SSD1306 OLED display are mounted at the back of the wri
 ### 4. Open the .sln file in Visual Studio, set the Solution Configuration to Release, the Solution Platform to ARM64 and Deploy to HoloLens2 using your preferred device.
 ### 5. Once in the game, select a scene: Demo or Labyrinth. After connecting to BlueTooth using the connection UI, the application would switch to the scene-specific UI to interact with virtual content.
 ### 6. The demo scene contains the following modes:
-    - Rotation: Virtual content will mirror the user's wrist movement.
-    - Translation: Choose between 3-Axis and Free Movement.
-    - Slicing: Use wrist movement to rotate the cutting plane and use fingerTaps to move it along the normal of the cutting plane.
-    - Opacity: Rotate the wrist to change the opacity of virtual conent. (Slider-based applications)
+- Rotation: Virtual content will mirror the user's wrist movement.
+- Translation: Choose between 3-Axis and Free Movement.
+- Slicing: Use wrist movement to rotate the cutting plane and use fingerTaps to move it along the normal of the cutting plane.
+- Opacity: Rotate the wrist to change the opacity of virtual conent. (Slider-based applications)
 ### 7. To switch between scenes, restart the application and repeat step 5.
 ### 8. Enjoy the application!
 <p align="center">
