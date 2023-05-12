@@ -1,7 +1,9 @@
 # Creating Novel 3D User Interaction Devices for Augmented Reality
 
 Our team has developed an innovative AR device in the form of a wearable glove that offers a unique and natural way to interact with virtual content. The device utilizes inertial sensors to accurately track the orientation of the user's wrist, providing a high level of precision in movement. The device's multi-modal interaction approach combines the established HoloLens AirTap gestures with our device's intuitive gestures. The latter employs a combination of inertial sensor data and finger taps, enabling a hybrid approach that lies between embodied gestures and handheld devices. This combination of modalities offers an intuitive and seamless means of interacting with virtual content, enhancing the user experience and productivity. Through this approach, we aim to bridge the gap between the virtual and physical worlds, providing a more natural and immersive AR experience.
-<img src="images/Hardware.jpg" width="35%" height="35%" style="display: block; margin: 0 auto">
+<p align="center">
+  <img src="images/Hardware.jpg" width="35%" height="35%">
+</p>
 
 ## Hardware Implementation
 The glove is controlled using an ESP32-C3 microcontroller mounted on the back of the hand. More specificaly, Expressif's RUST development board was used and selected because it has ICM-46270 IMU with 6 degrees of freedom on-board as well as a wide range of IO pins to interface with various other sensors. The ESP32-C3 also contains a Bluetooth module that is used to connect the device to the Hololens2. 
