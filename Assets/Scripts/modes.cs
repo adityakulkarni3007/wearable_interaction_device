@@ -7,9 +7,12 @@ using Microsoft.MixedReality.Toolkit.UI;
 
 public class modes : MonoBehaviour
 {
+    // text objects
+    public TMP_Text[] modeText;
+    private string[] textTags;
+
     private int translation_mode;
     private float[] q; 
-    private string[] textTags;
     private string translation_method;
     private float qx, qy, qz, qw, curr_theta, prev_theta, startTime, maintainTime, delta;
     private GameObject rotationGoalObj, translationGoalObj, slicerGoalObj, opacityGoalObj, indexFingerText, middleFingerText, ringFingerText, littleFingerText;
@@ -24,12 +27,13 @@ public class modes : MonoBehaviour
     public float scaling_factor;
     public GameObject cuttingPlane, body;
     public PinchSlider opacitySlider;
-    public TMP_Text[] modeText;
+    
     private Vector3 initialPosition;
 
     // Start is called before the first frame update
     void Start()
     {
+        // initialize gameobjects
         cuttingPlane                = GameObject.FindWithTag("cuttingPlane");
         indexFingerText             = GameObject.FindWithTag("indexFinger");
         middleFingerText            = GameObject.FindWithTag("middleFinger");
@@ -45,7 +49,6 @@ public class modes : MonoBehaviour
         spikes                      = GameObject.FindGameObjectsWithTag("spikes");
         envelope                    = GameObject.FindGameObjectsWithTag("envelope");
         insides                     = GameObject.FindGameObjectsWithTag("insides");
-        // resultText                  = GameObject.FindGameObjectsWithTag("result");
         translationReferenceAxes    = new GameObject[3];
         translationReferenceAxes[0] = GameObject.FindWithTag("RefX");
         translationReferenceAxes[1] = GameObject.FindWithTag("RefY");
@@ -63,25 +66,20 @@ public class modes : MonoBehaviour
         curr_theta                  = 0.0f; 
         prev_theta                  = 0.0f;
         delta                       = 0.0f;
-        // rotationGoalObj             = GameObject.FindWithTag("rotationGoal");
-        // translationGoalObj          = GameObject.FindWithTag("translationGoal");
-        // slicerGoalObj               = GameObject.FindWithTag("slicerGoal");
-        // opacityGoalObj              = GameObject.FindWithTag("opacityGoal");
         FliterUpdate                = GameObject.FindObjectOfType<fliterUpdate>();
         inMode                      = false;   
         initialPosition             = body.transform.position;
 
-        // rotationGoalObj.SetActive(false);
-        // translationGoalObj.SetActive(false);
-        // slicerGoalObj.SetActive(false);
-        // opacityGoalObj.SetActive(false);
-        // setGameObjectArrayActive(ref resultText, false);
+        // initializes the mode text by finding the objects with matching tags
         for (int i=0; i<textTags.Length; i++){
             modeText[i] = GameObject.FindWithTag(textTags[i]).GetComponent<TMP_Text>();
         }
+        // sets reference axis colors
         translationReferenceAxes[0].GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         translationReferenceAxes[1].GetComponent<Renderer>().material.SetColor("_Color", Color.green);
         translationReferenceAxes[2].GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+
+        // sets the colors of the coronavirus object materials
         mat1 = new Material[spikes.Length + envelope.Length + insides.Length];
         for (int i = 0; i < spikes.Length; i++){   
             spikes[i].GetComponent<Renderer>().material.SetColor("_Color", Color.red);   
@@ -120,7 +118,7 @@ public class modes : MonoBehaviour
         else if(inMode==false){
             modeSelection();
         }
-        // checkTask();
+
         checkMode();
         if (resetFlag)
         {
@@ -152,11 +150,17 @@ public class modes : MonoBehaviour
         Debug.Log("1: " + buttonDelta1 + " 2: " + buttonDelta2 + " 3: " + buttonDelta3 + " 4: " + buttonDelta4);
     }
 
+
+    /**
+     * Sets the fliterUpdate global variable
+     * @param update instance of fliterUpdate to use
+     */
     public void getData(ref fliterUpdate update)
     {
         FliterUpdate = update;
     }
 
+    // Executes each mode based on the value of the mode variable
     void checkMode()
     {
         if (mode == "rotation")
@@ -165,7 +169,6 @@ public class modes : MonoBehaviour
             if (qx != null && qy != null && qz != null && qw != null)
             {
                 rotation(body);   
-                // checkPoseGoal(rotationGoalObj, body);
             }
             setRotationPalmText();
         }
@@ -175,7 +178,6 @@ public class modes : MonoBehaviour
         }
         if (mode == "translation")
         {
-            // checkPoseGoal(translationGoalObj, body);
             if (translation_method == "free"){
                 setGameObjectArrayActive(ref translationAxis, true);
                 translation_wrt_world(body);
@@ -194,7 +196,7 @@ public class modes : MonoBehaviour
                 }
             }
             else if(translation_method == "noMode"){
-                // Check which mode the user wants to select
+                // Check which translation mode the user wants to select
                 if (buttonDelta1==1){
                     translation_method = "axis";
                 }
@@ -230,7 +232,6 @@ public class modes : MonoBehaviour
         {
             for (int i=0; i<mat1.Length; i++)
                 mat1[i].SetInt("_opacityMode", 0);
-            // checkPoseGoal(slicerGoalObj, cuttingPlane);
             rotation(cuttingPlane);
             for (int i = 0; i < mat1.Length; i++){
                 mat1[i].SetVector("_planePosition", cuttingPlane.transform.position);
@@ -255,9 +256,7 @@ public class modes : MonoBehaviour
         }
         if (mode == "opacity")
         {
-            // checkOpacityGoal();
             opacity();
-            // Debug.Log(opacitySlider.SliderValue);
             setOpacityPalmText();
         }
         else{
@@ -267,35 +266,6 @@ public class modes : MonoBehaviour
         }
     }
 
-/*
-    void checkTask()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            setGameObjectArrayActive(ref resultText, false);
-            maintainTime    = 0.0f;
-            goalFlag        = false;
-            startTime       = Time.time;
-            if (mode == "rotation")
-            {
-                rotationGoalObj.SetActive(true);
-            }
-            if (mode == "translation")
-            {
-                translationGoalObj.SetActive(true);
-                translationGoalObj.transform.rotation = body.transform.rotation;
-            }
-            if (mode == "slicing")
-            {
-                slicerGoalObj.SetActive(true);
-            }
-            if (mode == "opacity")
-            {
-                opacityGoalObj.SetActive(true);
-            }
-        }
-    }
-*/
     // This method is responsible for updating the IMU data.
     public void updateIMU(float[] q, float[] sensorData)
     {
@@ -367,6 +337,7 @@ public class modes : MonoBehaviour
         if (buttonDelta4 == 1){checkOpacityMode();}
     }
 
+    // initializes rotation mode
     public void checkRotationMode()
     {
         buttonDelta1 = 0;
@@ -374,23 +345,22 @@ public class modes : MonoBehaviour
         mode = "rotation";
         Debug.Log("Mode inside checkRotationMode: " + mode);
         setGameObjectArrayActive(ref rotationText, true);
-        // disableGoalObjects();
     }
 
+    // initializes translation mode
     public void checkTranslationMode()
     {
         buttonDelta2 = 0;
         inMode = true;
         mode = "translation";
-        // disableGoalObjects();
     }
 
+    // initializes slicing mode
     public void checkSlicingMode()
     {
         buttonDelta3 = 0;
         inMode = true;
         mode = "slicing";
-        // disableGoalObjects();
         cuttingPlane.SetActive(true);
         setGameObjectArrayActive(ref slicerText, true);
         // Set the cutting plane's position and rotation to match the body's position and rotation.
@@ -398,26 +368,29 @@ public class modes : MonoBehaviour
         cuttingPlane.transform.rotation = body.transform.rotation;
     }
 
+    // initializes opacity mode
     public void checkOpacityMode()
     {
         buttonDelta4 = 0;
         inMode = true;
         mode = "opacity";
-        // disableGoalObjects();
         opacitySlider.gameObject.SetActive(true);
         setGameObjectArrayActive(ref opacityText, true);
     }
 
+    // sets 3-axis translation mode
     public void checkTranslation3Axis()
     {
         translation_method = "axis";
     }
 
+    // sets free translation mode
     public void checkTranslationFree()
     {
         translation_method = "free";
     }
 
+    // set mode text based on current mode
     void changeModeTextOpacity()
     {
         for (int i = 0; i < modeText.Length; i++) {
@@ -436,6 +409,7 @@ public class modes : MonoBehaviour
         }
     }
 
+    // sets the axis for 3-axis translation mode 
     void selectAxis(GameObject obj)
     {
         if (buttonDelta1==1) {
@@ -449,7 +423,8 @@ public class modes : MonoBehaviour
         translation_three_axis(obj);
         Debug.Log("Translation mode: " + translation_mode);
     }
-
+    
+    // translates the object with respect to the world
     void translation_wrt_world(GameObject obj)
     {
         for (int i=0; i<translationAxis.Length; i++){
@@ -463,6 +438,7 @@ public class modes : MonoBehaviour
         }
     }
 
+    // object translation based on which translation axis is selected
     void translation_three_axis(GameObject obj)
     {
         if (translation_mode == 1){
@@ -476,9 +452,9 @@ public class modes : MonoBehaviour
         }
     }
 
+    // translates the object with respect to it's current position 
     void translation_wrt_gameObject(GameObject obj, bool dir)
     {
-        // transform.position = transform.position + new Vector3(0, delta_x, delta_y);
         if (dir){
             obj.transform.position += obj.transform.TransformDirection(new Vector3(0.0f,0.01f*1.0f,0.0f));
         }
@@ -487,6 +463,10 @@ public class modes : MonoBehaviour
         }
     }
 
+    /** 
+     * Rotates the object by converting from IMU reference frame to Unity frame before transforming the object
+     * @param obj the object to be rotated
+     */
     void rotation(GameObject obj)
     {
         // Unity accepts x,y,z,w
@@ -500,6 +480,8 @@ public class modes : MonoBehaviour
         obj.transform.rotation = spin5*spin1*spin2*spin3*spin4*rot;
     }
 
+
+    // adjust the opacity of the object
     void opacity()
     {
         float outOpacity = (-curr_theta + 3.14f) / (2*3.14f);
@@ -507,71 +489,14 @@ public class modes : MonoBehaviour
             mat1[i].SetInt("_opacityMode", 1);
             mat1[i].SetFloat("_opacity", outOpacity);
         }
-        // Debug.Log(outOpacity);
         opacitySlider.SliderValue = outOpacity;
     }
 
-/*
-    void checkOpacityGoal() {
-        float errorThresh = .05f; //maximum error between goal and curr position
-        float goalVal = opacityGoalObj.GetComponent<Renderer>().material.GetFloat("_opacity"); // goal position
-        float error = Mathf.Abs(opacitySlider.value - goalVal);
-        Debug.Log(error);
-        if (error < errorThresh) {
-            string errorMsg = "Error: " + error.ToString();
-            // Check if the user maintains the goal position for 3 seconds
-            isGoalMaintained(errorMsg);
-        }
-    }
-*/
-    // void checkPoseGoal(GameObject obj, GameObject goalObj)
-    // {
-    //     Vector3 goalPos = goalObj.transform.position; // goal position
-    //     float errorTThresh = 20.0f; //maximum error between goal and curr position
-    //     Quaternion goalRot = goalObj.transform.rotation; // goal rotation
-    //     float errorRThresh = 0.1f; //maximum errorR between goal and curr orientation
-
-    //     // get errors
-    //     Vector3 errorT = new Vector3();
-    //     errorT[0] = Mathf.Abs(goalPos.x - obj.transform.position.x);
-    //     errorT[1] = Mathf.Abs(goalPos.y - obj.transform.position.y);
-    //     errorT[2] = Mathf.Abs(goalPos.z - obj.transform.position.z);
-
-        
-        
-    //     // get errorR
-    //     Vector4 errorR = new Vector4();
-    //     errorR[0] = Mathf.Abs(goalRot.x - obj.transform.rotation.x);
-    //     errorR[1] = Mathf.Abs(goalRot.y - obj.transform.rotation.y);
-    //     errorR[2] = Mathf.Abs(goalRot.z - obj.transform.rotation.z);
-    //     errorR[3] = Mathf.Abs(goalRot.w - obj.transform.rotation.w);
-
-    //     //calculate magnitude of errorT
-    //     float errorTMag = Mathf.Sqrt(Mathf.Pow(errorT[0],2.0f) + Mathf.Pow(errorT[1], 2.0f) + Mathf.Pow(errorT[2], 2.0f));
-    //     // Debug.Log("ErrorT: " + errorTMag);
-
-    //     //calculate magnitude of errorR
-    //     float errorRMag = Mathf.Sqrt(Mathf.Pow(errorR[0],2.0f) + Mathf.Pow(errorR[1], 2.0f) + Mathf.Pow(errorR[2], 2.0f) + Mathf.Pow(errorR[3], 2.0f));
-    //     // Debug.Log("ErrorR: " + errorRMag);
-        
-    //     if (errorTMag < errorTThresh & errorRMag < errorRThresh)
-    //     {
-    //         string errorMsg = "Error(position): " + errorTMag.ToString() + " Error(rotation): " + errorRMag.ToString();
-    //         // Check if the user maintains the goal position for 3 seconds
-    //         isGoalMaintained(errorMsg);
-    //     }
-    //     else
-    //     {
-    //         maintainTime = 0.0f;
-    //     }
-    // }
-
-    // void checkSlicerGoal()
-    // {
-
-    // }
-
-    // Utils
+    /**
+     * Sets object(s) active status
+     * @param obj array of objects to set
+     * @param enable true if setting to active, false if setting to inactive
+     */
     void setGameObjectArrayActive(ref GameObject[] obj, bool enable)
     {
         for (int i=0; i<obj.Length; i++){
@@ -579,6 +504,7 @@ public class modes : MonoBehaviour
         }
     }
 
+    // sets the text on the palm to menu mode
     void setDefaultPalmText()
     {
         indexFingerText.GetComponent<TMP_Text>().text = "Rotation";
@@ -587,6 +513,7 @@ public class modes : MonoBehaviour
         littleFingerText.GetComponent<TMP_Text>().text = "Opacity";
     }
 
+    // sets the text on the palm to rotation mode
     void setRotationPalmText()
     {
         indexFingerText.GetComponent<TMP_Text>().text = " ";
@@ -595,9 +522,11 @@ public class modes : MonoBehaviour
         littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
     }
 
+    // sets the text on the palm to translation mode
     void setTranslationPalmText()
     {
-        if (translation_method == "free"){
+        // mode text for free translation
+        if (translation_method == "free"){ 
             indexFingerText.GetComponent<TMP_Text>().text = "Move";
             indexFingerText.GetComponent<TMP_Text>().color = new Color((109f/255f), (109f/255f), 1f, 1.0f);
             middleFingerText.GetComponent<TMP_Text>().text = "Move";
@@ -605,12 +534,14 @@ public class modes : MonoBehaviour
             ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
             littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
         }
+        // mode text for 3-axis translation
         else if(translation_method == "axis"){
             indexFingerText.GetComponent<TMP_Text>().text = "Next Axis";
             middleFingerText.GetComponent<TMP_Text>().text = "Previous Axis";
             ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
             littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
         }
+        // mode text for translation mode selection
         else if(translation_method == "noMode")
         {
             indexFingerText.GetComponent<TMP_Text>().text = "3 Axis Mode";
@@ -620,6 +551,7 @@ public class modes : MonoBehaviour
         }
     }
 
+    // sets the text on the palm to slicing mode
     void setSlicingPalmText()
     {
         indexFingerText.GetComponent<TMP_Text>().text = "Move";
@@ -630,6 +562,7 @@ public class modes : MonoBehaviour
         littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
     }
 
+    // sets the text on the palm to opacity mode
     void setOpacityPalmText()
     {
         indexFingerText.GetComponent<TMP_Text>().text = " ";
@@ -637,65 +570,31 @@ public class modes : MonoBehaviour
         ringFingerText.GetComponent<TMP_Text>().text = "Freeze";
         littleFingerText.GetComponent<TMP_Text>().text = "Main Menu";
     }
-/*
-    void disableGoalObjects()
-    {
-        //TODO: Disable the textbox
-        goalFlag = true;
-        rotationGoalObj.SetActive(false);
-        translationGoalObj.SetActive(false);
-        slicerGoalObj.SetActive(false);
-        opacityGoalObj.SetActive(false);
-        setGameObjectArrayActive(ref resultText, false);
-        maintainTime = 0.0f;
-    }
-*/
-    // void goalAchieved(string errorMsg)
-    // {
-    //     float timeToCompletion = 0.0f;
-    //     timeToCompletion = Time.time - startTime - 1.5f;
-    //     goalFlag = true;
-    //     resultText[0].GetComponent<TMP_Text>().text = "Goal Reached!" + "\n" + 
-    //                                             "Time to Completion: " + timeToCompletion.ToString() + " seconds" +
-    //                                             "\n" + "Accuracy: " + errorMsg;
-    //     setGameObjectArrayActive(ref resultText, true);
-    //     // Debug.Log(timeToCompletion);
-    // }
 
-    // void isGoalMaintained(string errorMsg)
-    // {
-        
-    //         if (maintainTime == 0.0f)
-    //         {
-    //             maintainTime = Time.time;
-    //         }
-    //         else if (Time.time - maintainTime > 1.5f)
-    //         {
-    //             if (goalFlag == false)
-    //             { //goal reached
-    //                 goalAchieved(errorMsg);
-    //             } else
-    //             {
-    //                 // Debug.Log("Goal Not Reached");
-    //             }        
-    //         }
-    // }
-
+    // gets the current state of al the buttons
     public float[] getButtonState()
     {
         return new float[] {button1, button2, button3, button4};
     }
 
+    // returns the current mode 
     public string getMode()
     {
         return mode;
     }
 
+    // sets the reset flag to true for the next update
     public void reset()
     {
         resetFlag = true;
     }
 
+    /** 
+     * Computes the modulus of x%m 
+     * @param x dividend
+     * @param m divisor
+     * @return x%m
+     */
     int mod(int x, int m) {
         int r = x%m;
         return r<0 ? r+m : r;
