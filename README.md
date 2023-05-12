@@ -41,6 +41,11 @@ The 3.7V battery and the SSD1306 OLED display are mounted at the back of the wri
   <img src="images/coolSlice.png" width="50%" height="50%" style="display: block; margin: 0 auto">
 </p>  
 <p align="center">
+    Slicing mode
+<p>
+<p align="center">
   <img src="images/Labyrinth.png" width="50%" height="50%" style="display: block; margin: 0 auto">
 </p>
-
+<p align="center">
+    The Labyrinth Game
+<p>
